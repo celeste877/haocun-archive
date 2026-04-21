@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>学术视野 | 刘浩存电影数字档案馆</title>
+    <meta name="description" content="基于语义网技术的电影数字档案馆——关联数据、知识图谱、语义标注。">
+    <!-- 网站图标 -->
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- ECharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        /* 页面标题区 */
+        .page-header {
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Noto Serif SC', '宋体', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .page-header p {
+            margin-top: 1rem;
+            color: var(--gray-mid);
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+            transition: var(--transition);
+        }
+        .content-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title .icon {
+            font-size: 1.8rem;
+        }
+        .content-text {
+            font-size: 1rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .tech-item {
+            background: var(--gray-light);
+            border-radius: 20px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .tech-item:hover {
+            transform: translateY(-4px);
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+        .tech-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tech-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
+        }
+        .tech-desc {
+            font-size: 0.85rem;
+            color: #000000;
+        }
+        .sparql-example {
+            background: var(--gray-light);
+            border-radius: 16px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        #kgChart {
+            width: 100%;
+            height: 550px;
+            margin: 1rem 0;
+            background: #fafaf8;
+            border-radius: 20px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-card {
+            background: var(--gray-light);
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--crimson);
+        }
+
+        /* 模拟查询样式 */
+        .query-demo {
+            background: var(--gray-light);
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+        .query-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .query-btn {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+        .query-btn:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
+        .query-result {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--gold);
+        }
+        .query-result pre {
+            white-space: pre-wrap;
+            font-family: monospace;
+            margin: 0;
+        }
+
+        /* 相关链接区域 */
+        .links-section {
+            padding: 2rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .links-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .links-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .tech-grid, .stat-grid {
+                grid-template-columns: 1fr;
+            }
+            #kgChart {
+                height: 400px;
+            }
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+            <ul class="nav-links">
+                <li><a href="sy.htm">首页</a></li>
+                <li><a href="rwjj.htm">人物档案</a></li>
+                <li><a href="zpk.htm">作品库</a></li>
+                <li><a href="ryjx.htm">荣誉奖项</a></li>
+                <li><a href="xssy.htm" class="active">学术视野</a></li>
+                <li><a href="gywm.htm">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>学术视野</h1>
+        
+            </div>
+
+            <!-- 统计概览 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>数据概览</span>
+                </div>
+                <div class="stat-grid" id="statGrid">
+                    <div class="stat-card"><div class="stat-number" id="movieCount">0</div><div>部电影作品</div></div>
+                    <div class="stat-card"><div class="stat-number" id="awardCount">0</div><div>项荣誉（获奖+提名）</div></div>
+                    <div class="stat-card"><div class="stat-number" id="actorCount">0</div><div>位合作演员</div></div>
+                </div>
+            </div>
+            <!-- 知识图谱可视化（无箭头） -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>知识图谱预览</span>
+                </div>
+                <div id="kgChart"></div>
+                <div class="content-text">
+                    <p>图谱展示刘浩存与导演、合作演员的关联网络。节点大小代表关联作品数量，连线表示合作关系。可拖拽、缩放查看细节。</p>
+                </div>
+            </div>
+
+            <!-- JSON-LD 示例 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>语义数据示例（JSON-LD）</span>
+                </div>
+                <div class="sparql-example">
+<pre>{
+  "@context": "https://schema.org",
+  "@type": "Movie",
+  "name": "一秒钟",
+  "director": { "@type": "Person", "name": "张艺谋" },
+  "actor": [
+    { "@type": "Person", "name": "刘浩存", "roleName": "刘闺女" },
+    { "@type": "Person", "name": "张译" }
+  ],
+  "datePublished": "2020",
+  "rating": "7.7"
+}</pre>
+                </div>
+                <div class="content-text">每个页面均已嵌入类似结构化数据，供搜索引擎和语义应用解析。</div>
+            </div>
+
+            <!-- SPARQL 查询示例 + 模拟交互查询 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>SPARQL 查询示例</span>
+                </div>
+                <div class="content-text">
+                    <p>以下为示例查询，展示如何通过语义查询获取知识：</p>
+                    <div class="sparql-example">
+                        <strong>查询1：刘浩存合作过的导演</strong><br>
+                        PREFIX ex: &lt;http://example.org/movie#&gt;<br>
+                        SELECT ?director WHERE {<br>
+                        &nbsp;&nbsp;ex:刘浩存 ex:合作导演 ?director .<br>
+                        }
+                    </div>
+                    <div class="sparql-example">
+                        <strong>查询2：2020年后上映且评分高于7.0的电影</strong><br>
+                        PREFIX ex: &lt;http://example.org/movie#&gt;<br>
+                        SELECT ?film ?rating WHERE {<br>
+                        &nbsp;&nbsp;?film ex:上映年份 ?year .<br>
+                        &nbsp;&nbsp;?film ex:豆瓣评分 ?rating .<br>
+                        &nbsp;&nbsp;FILTER(?year >= 2020 && ?rating > 7.0)<br>
+                        }
+                    </div>
+                    <p style="margin-top: 0.8rem;">实际 SPARQL 端点正在规划中，未来将提供公开查询接口。</p>
+                </div>
+
+                <!-- 新增：模拟 SPARQL 查询交互演示 -->
+                <div class="query-demo">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;"> 交互演示（基于本地数据模拟查询）</div>
+                    <div class="query-buttons">
+                        <button class="query-btn" id="queryDirectorsBtn"> 查询合作导演</button>
+                        <button class="query-btn" id="queryHighRatingBtn"> 查询高分电影（2020年后，评分>7.0）</button>
+                    </div>
+                    <div class="query-result" id="queryResult">
+                        <span style="color: var(--gray-mid);">点击上方按钮查看查询结果</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相关链接模块 -->
+        <div class="links-section">
+            <div class="container">
+                <div class="links-title">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面展示语义网技术在电影档案中的应用，知识图谱基于作品数据实时生成。</p>
+    </footer>
+
+    <script>
+        // ==================== 数据定义 ====================
+        const moviesData = [
+            { title: "一秒钟", director: "张艺谋", actors: ["张译","范伟","余皑磊"], year: 2020, rating: 7.7 },
+            { title: "送你一朵小红花", director: "韩延", actors: ["易烊千玺","朱媛媛","高亚麟","夏雨","岳云鹏"], year: 2020, rating: 7.2 },
+            { title: "悬崖之上", director: "张艺谋", actors: ["张译","于和伟","秦海璐","朱亚文","倪大红","李乃文","余皑磊"], year: 2021, rating: 7.4 },
+            { title: "四海", director: "韩寒", actors: ["刘昊然","沈腾","尹正","乔杉","周奇","张宥浩"], year: 2022, rating: 5.6 },
+            { title: "龙马精神", director: "杨子", actors: ["成龙","郭麒麟","吴京","余皑磊","容祖儿"], year: 2023, rating: 5.8 },
+            { title: "念念相忘", director: "刘雨霖", actors: ["宋威龙","卜冠今","郭丞","高亚麟","倪虹洁"], year: 2023, rating: 6.9 },
+            { title: "灿烂的她", director: "徐伟", actors: ["惠英红","张子贤","刘欢","苇青"], year: 2024, rating: 5.9 },
+            { title: "想飞的女孩", director: "文晏", actors: ["文淇","张宥浩","刘奕铁","杨皓宇","耿乐"], year: 2025, rating: 5.4 },
+            { title: "消失的人", director: "程伟豪", actors: ["郑恺","邱泽","李晨","姜妍","黄小蕾"], year: 2026, rating: null }
+        ];
+
+        const awardsData = [
+            { result: "获奖" }, { result: "获奖" }, { result: "提名" }, { result: "获奖" }, { result: "提名" }, { result: "获奖" },
+            { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" },
+            { result: "获奖" }, { result: "提名" }, { result: "获奖" }, { result: "提名" }, { result: "提名" }, { result: "获奖" },
+            { result: "获奖" }, { result: "提名" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" },
+            { result: "获奖" }, { result: "提名" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" },
+            { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" }, { result: "获奖" },
+            { result: "获奖" }, { result: "提名" }
+        ];
+
+        const movieCount = moviesData.length;
+        const awardTotal = awardsData.length;
+        const allActors = new Set();
+        moviesData.forEach(m => m.actors.forEach(a => allActors.add(a)));
+        const actorCount = allActors.size;
+
+        document.getElementById('movieCount').innerText = movieCount;
+        document.getElementById('awardCount').innerText = awardTotal;
+        document.getElementById('actorCount').innerText = actorCount;
+
+        // 知识图谱构建（无箭头）
+        const nodesSet = new Map();
+        const linksSet = new Map();
+
+        nodesSet.set("刘浩存", { name: "刘浩存", category: 0, symbolSize: 45, itemStyle: { color: "#9b2c1d" } });
+
+        moviesData.forEach(movie => {
+            nodesSet.set(movie.title, { name: movie.title, category: 1, symbolSize: 28 });
+            linksSet.set(`刘浩存-${movie.title}`, { source: "刘浩存", target: movie.title, lineStyle: { color: "#c9a96e", width: 2, curveness: 0.2 } });
+
+            nodesSet.set(movie.director, { name: movie.director, category: 2, symbolSize: 22 });
+            linksSet.set(`${movie.title}-${movie.director}`, { source: movie.title, target: movie.director, lineStyle: { color: "#aaa", width: 1.5 } });
+
+            movie.actors.forEach(actor => {
+                nodesSet.set(actor, { name: actor, category: 3, symbolSize: 18 });
+                linksSet.set(`${movie.title}-${actor}`, { source: movie.title, target: actor, lineStyle: { color: "#bbb", width: 1, curveness: 0.1 } });
+            });
+        });
+
+        const nodes = Array.from(nodesSet.values());
+        const links = Array.from(linksSet.values());
+
+        const categories = [
+            { name: "演员中心" },
+            { name: "电影作品" },
+            { name: "导演" },
+            { name: "合作演员" }
+        ];
+
+        const chartDom = document.getElementById('kgChart');
+        const myChart = echarts.init(chartDom);
+        const option = {
+            title: {
+                left: 'center',
+                top: 0,
+                textStyle: { color: '#9b2c1d', fontSize: 14, fontWeight: 'normal' }
+            },
+            tooltip: { trigger: 'item', formatter: '{b}' },
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                force: { repulsion: 800, edgeLength: 150, gravity: 0.1, friction: 0.1 },
+                roam: true,
+                draggable: true,
+                data: nodes.map(n => ({
+                    name: n.name,
+                    category: n.category,
+                    symbolSize: n.symbolSize,
+                    itemStyle: n.itemStyle
+                })),
+                links: links,
+                categories: categories,
+                label: { show: true, position: 'right', fontSize: 10, offset: [5, 0], formatter: '{b}' },
+                emphasis: { focus: 'adjacency', lineStyle: { width: 2, color: '#9b2c1d' } },
+                lineStyle: { color: 'source', curveness: 0.2, opacity: 0.6 },
+                roamZoom: true
+            }]
+        };
+        myChart.setOption(option);
+        window.addEventListener('resize', () => myChart.resize());
+
+        // ==================== 模拟 SPARQL 查询交互 ====================
+        // 查询1：刘浩存合作过的导演（去重）
+        function queryDirectors() {
+            const directorsSet = new Set();
+            moviesData.forEach(movie => {
+                if (movie.director) directorsSet.add(movie.director);
+            });
+            const directors = Array.from(directorsSet).sort();
+            if (directors.length === 0) {
+                return "未查询到合作导演。";
+            }
+            return `🎬 刘浩存合作过的导演（共 ${directors.length} 位）：\n${directors.join("、")}`;
+        }
+
+        // 查询2：2020年后上映且豆瓣评分高于7.0的电影
+        function queryHighRatingMovies() {
+            const filtered = moviesData.filter(m => m.year >= 2020 && m.rating !== null && m.rating > 7.0);
+            if (filtered.length === 0) {
+                return "未找到符合条件的高分电影。";
+            }
+            let result = `⭐ 2020年后上映且评分 > 7.0 的电影（共 ${filtered.length} 部）：\n`;
+            filtered.forEach(m => {
+                result += `《${m.title}》 (${m.year}) · 豆瓣评分 ${m.rating}\n`;
+            });
+            return result;
+        }
+
+        // 显示结果
+        function showQueryResult(content) {
+            const resultDiv = document.getElementById('queryResult');
+            resultDiv.innerHTML = `<pre style="white-space: pre-wrap; margin:0;">${content}</pre>`;
+        }
+
+        document.getElementById('queryDirectorsBtn').addEventListener('click', () => {
+            const result = queryDirectors();
+            showQueryResult(result);
+        });
+
+        document.getElementById('queryHighRatingBtn').addEventListener('click', () => {
+            const result = queryHighRatingMovies();
+            showQueryResult(result);
+        });
+    </script>
+</body>
+</html>

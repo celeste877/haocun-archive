@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>荣誉奖项 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="刘浩存荣誉奖项：金鸡奖提名、华鼎奖获奖、亚洲电影大奖等。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 - 与首页一致 */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        /* 重叠图片墙 - 所有图片完全重叠，统一尺寸，直接切换 */
+        .overlap-wall {
+            position: relative;
+            width: 100%;
+            min-height: 420px;
+            margin: 2rem 0 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 统一图片尺寸 - 缩小版 */
+        .overlap-item {
+            position: absolute;
+            transition: none;
+            opacity: 0.3;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            width: 260px;
+            height: 390px;
+            max-width: 70vw;
+            max-height: calc(70vw * 1.5);
+        }
+        .overlap-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            display: block;
+        }
+        /* 当前播放的图片 */
+        .overlap-item.active {
+            opacity: 1;
+            z-index: 10;
+            box-shadow: 0 0 0 3px var(--gold), 0 15px 30px rgba(0,0,0,0.3);
+        }
+        /* 响应式调整尺寸 */
+        @media (max-width: 768px) {
+            .overlap-item {
+                width: 200px;
+                height: 300px;
+            }
+        }
+        @media (max-width: 480px) {
+            .overlap-item {
+                width: 150px;
+                height: 225px;
+            }
+        }
+
+        /* 页面标题区 */
+        .page-header {
+            padding: 1rem 0 0.5rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Noto Serif SC', '宋体', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        /* 左右分栏布局 */
+        .awards-layout {
+            display: flex;
+            gap: 3rem;
+            margin: 2rem 0 4rem;
+        }
+
+        /* 左侧年份导航 */
+        .year-nav {
+            flex: 0 0 160px;
+            position: sticky;
+            top: 100px;
+            align-self: start;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+        .year-nav ul {
+            list-style: none;
+        }
+        .year-nav li {
+            text-align: center;
+            padding: 0.6rem 0;
+            margin: 0 0.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--gray-mid);
+        }
+        .year-nav li:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+        .year-nav li.active {
+            background: var(--crimson);
+            color: white;
+        }
+
+        /* 右侧奖项流 */
+        .awards-stream {
+            flex: 1;
+        }
+        .award-year-group {
+            margin-bottom: 3rem;
+            scroll-margin-top: 100px;
+        }
+        .year-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--crimson);
+            font-family: 'Noto Serif SC', serif;
+            border-left: 4px solid var(--gold);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .award-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .award-card-new {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(155,44,29,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .award-card-new:hover {
+            transform: translateX(6px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold);
+        }
+        .award-icon {
+            font-size: 1.8rem;
+            width: 48px;
+            text-align: center;
+        }
+        .award-info {
+            flex: 1;
+        }
+        .award-name-new {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            color: var(--charcoal);
+        }
+        .award-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--gray-mid);
+        }
+        .award-work-new {
+            background: var(--gold-light);
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            color: #333;
+        }
+        .award-result-new {
+            font-weight: 600;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+        }
+        .result-win-new {
+            background: var(--gold);
+            color: white;
+        }
+        .result-nom-new {
+            background: #e8e8e8;
+            color: var(--gray-mid);
+        }
+        .award-date-right {
+            font-size: 0.85rem;
+            color: var(--crimson);
+            background: rgba(155,44,29,0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .awards-layout {
+                flex-direction: column;
+            }
+            .year-nav {
+                position: static;
+                flex: auto;
+                margin-bottom: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+                padding: 0.5rem;
+            }
+            .year-nav ul {
+                display: flex;
+                gap: 0.5rem;
+            }
+            .year-nav li {
+                display: inline-block;
+                padding: 0.4rem 1rem;
+            }
+            .award-card-new {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .award-icon {
+                align-self: center;
+            }
+            .award-date-right {
+                align-self: flex-end;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* 统计小卡片 */
+        .stats-float {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin: 1rem 0 0;
+        }
+        .stat-badge {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .stat-badge span {
+            color: var(--crimson);
+            font-weight: 700;
+            margin-right: 0.3rem;
+        }
+
+        /* 外部链接 */
+        .links-section {
+            padding: 2rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+            <ul class="nav-links">
+                <li><a href="sy.htm">首页</a></li>
+                <li><a href="rwjj.htm">人物档案</a></li>
+                <li><a href="zpk.htm">作品库</a></li>
+                <li><a href="ryjx.htm" class="active">荣誉奖项</a></li>
+                <li><a href="xssy.htm">学术视野</a></li>
+                <li><a href="gywm.htm">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- 重叠图片墙：6张图片完全重叠，统一尺寸，直接切换 -->
+            <div class="overlap-wall">
+                <div class="overlap-container" id="overlapContainer">
+                    <div class="overlap-item"><img src="/11.jpg" alt="荣誉图1"></div>
+                    <div class="overlap-item"><img src="/12.jpg" alt="荣誉图2"></div>
+                    <div class="overlap-item"><img src="/13.jpg" alt="荣誉图3"></div>
+                    <div class="overlap-item"><img src="/14.jpg" alt="荣誉图4"></div>
+                    <div class="overlap-item"><img src="/15.jpg" alt="荣誉图5"></div>
+                    <div class="overlap-item"><img src="/16.jpg" alt="荣誉图6"></div>
+                </div>
+            </div>
+
+            <div class="page-header">
+                <h1>荣誉奖项</h1>
+            </div>
+
+            <div class="stats-float" id="statsFloat">
+                <div class="stat-badge">🏆 <span id="winCount">0</span> 获奖</div>
+                <div class="stat-badge">📝 <span id="nomCount">0</span> 提名</div>
+                <div class="stat-badge">✨ <span id="totalCount">0</span> 项荣誉</div>
+            </div>
+
+            <div class="awards-layout">
+                <div class="year-nav" id="yearNav">
+                    <ul></ul>
+                </div>
+                <div class="awards-stream" id="awardsStream"></div>
+            </div>
+        </div>
+
+        <div class="links-section">
+            <div class="container">
+                <div class="section-title" style="font-family: 'Noto Serif SC', serif; font-size: 1.6rem; font-weight: 600; color: var(--crimson); margin-bottom: 1.5rem;">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面展示刘浩存历年荣誉奖项，数据持续更新。</p>
+    </footer>
+
+    <script>
+        // 重叠图片自动播放控制
+        const overlapItems = document.querySelectorAll('.overlap-item');
+        let currentIndex = 0;
+        let autoTimer = null;
+
+        function highlightItem(index) {
+            overlapItems.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % overlapItems.length;
+            highlightItem(currentIndex);
+        }
+
+        function startAutoPlay() {
+            if (autoTimer) clearInterval(autoTimer);
+            autoTimer = setInterval(() => {
+                nextSlide();
+            }, 1500);
+        }
+
+        function stopAutoPlay() {
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        }
+
+        if (overlapItems.length) {
+            highlightItem(0);
+            startAutoPlay();
+            const wall = document.querySelector('.overlap-wall');
+            wall.addEventListener('mouseenter', stopAutoPlay);
+            wall.addEventListener('mouseleave', startAutoPlay);
+        }
+
+        // 奖项数据（完整数据）
+        const awardsData = [
+            { date: "2025.11.4", name: "2025电视剧00女演员中坚力量", work: "", result: "获奖" },
+            { date: "2025.10.27", name: "第一届北京市广播影视春燕奖电影类优秀女配角", work: "《悬崖之上》", result: "获奖" },
+            { date: "2025.8.1", name: "第20届中国长春电影节金鹿奖最佳女演员", work: "《想飞的女孩》", result: "提名" },
+            { date: "2025.4.23", name: "第1届亚洲艺术电影节主竞赛单元最佳女主角", work: "《想飞的女孩》", result: "获奖" },
+            { date: "2025.1.29", name: "第3届中国电视剧年度盛典年度影响力女演员", work: "《上甘岭》", result: "提名" },
+            { date: "2025.1.29", name: "第3届中国电视剧年度盛典年度新锐", work: "《上甘岭》", result: "获奖" },
+            { date: "2025.1.1", name: "2024微博之夜微博年度表现力演员", work: "", result: "获奖" },
+            { date: "2024.12.1", name: "2024腾讯娱乐白皮书年度电影受欢迎演员", work: "", result: "获奖" },
+            { date: "2024.6.16", name: "2024微博电影之夜年度表现力演员", work: "", result: "获奖" },
+            { date: "2024.4.12", name: "2023-2024年度中国电影大数据暨电影频道M榜荣誉之夜-年度影响力青年演员", work: "", result: "获奖" },
+            { date: "2024.1.1", name: "2023微博之夜-微博年度期待演员", work: "", result: "获奖" },
+            { date: "2023.12.22", name: "2023搜狐时尚盛典年度潜力演员", work: "", result: "获奖" },
+            { date: "2023.12.1", name: "2023微博视界大会-年度突破演员", work: "", result: "获奖" },
+            { date: "2023.12.1", name: "第15届澳门国际电影节金莲花奖-最佳新人", work: "《龙马精神》", result: "提名" },
+            { date: "2023.4.1", name: "第2届澳涞坞五大洲电影节金莉花奖-华语电影单元-华语最佳女主角", work: "《四海》", result: "获奖" },
+            { date: "2022.1.1", name: "第18届广州大学生电影展-推荐女主角", work: "《送你一朵小红花》", result: "提名" },
+            { date: "2022.1.1", name: "第16届华语青年电影周-年度新锐女演员", work: "《送你一朵小红花》", result: "提名" },
+            { date: "2022.1.1", name: "2021腾讯娱乐白皮书-新生代品质电影演员", work: "《悬崖之上》", result: "获奖" },
+            { date: "2021.12.1", name: "第2届光影中国荣誉盛典-年度荣誉推介新人女演员", work: "《送你一朵小红花》", result: "获奖" },
+            { date: "2021.12.1", name: "第34届中国电影金鸡奖-最佳女主角", work: "《送你一朵小红花》", result: "提名" },
+            { date: "2021.11.1", name: "第17届中美电影节金天使奖-年度最佳新晋演员", work: "《悬崖之上》", result: "获奖" },
+            { date: "2021.10.1", name: "第6届中国电影周金鹤奖-最佳人气女演员奖", work: "《悬崖之上》", result: "获奖" },
+            { date: "2021.10.1", name: "第8届文荣奖-新生代单元-电影类最佳青年女演员奖", work: "《一秒钟》", result: "获奖" },
+            { date: "2021.10.1", name: "第15届亚洲电影大奖-最佳新演员", work: "《一秒钟》", result: "获奖" },
+            { date: "2021.9.1", name: "第28届大学生电影节青春之夜-最受大学生欢迎年度新人奖", work: "《送你一朵小红花》", result: "获奖" },
+            { date: "2021.9.1", name: "第31届华鼎奖-全球电影最佳新锐演员奖", work: "《一秒钟》", result: "提名" },
+            { date: "2021.8.1", name: "第30届华鼎奖-中国电影最佳新锐演员奖", work: "《送你一朵小红花》", result: "获奖" },
+            { date: "2021.6.1", name: "2021微博电影之夜-年度最受关注演员", work: "", result: "获奖" },
+            { date: "2021.6.1", name: "第18届电影频道传媒大奖-最受传媒关注新人女演员", work: "《送你一朵小红花》", result: "获奖" },
+            { date: "2021.3.1", name: "第12届青年电影手册年度盛典-年度新演员", work: "《一秒钟》", result: "获奖" },
+            { date: "2021.2.1", name: "2020微博之夜-微博年度期待演员", work: "", result: "获奖" },
+            { date: "2021.2.1", name: "2020中国银幕风云榜-年度新人演员", work: "《一秒钟》《送你一朵小红花》", result: "获奖" },
+            { date: "2021.1.1", name: "2020百度娱乐人物-年度最佳电影新人", work: "", result: "获奖" },
+            { date: "2021.1.1", name: "2020腾讯娱乐年度盛典-年度电影新演员", work: "《一秒钟》《送你一朵小红花》", result: "获奖" },
+            { date: "2021.1.1", name: "第1届金榆花奖-最佳新锐影人", work: "《一秒钟》《送你一朵小红花》", result: "获奖" },
+            { date: "2020.12.1", name: "2020尚流Tatler盛典-尚流新星奖", work: "", result: "获奖" },
+            { date: "2020.12.1", name: "2020年度电影频道M榜-年度最具潜力演员", work: "", result: "获奖" },
+            { date: "2020.12.1", name: "第1届Feng向标2020年度榜单-电影类-年度女演员", work: "《一秒钟》", result: "提名" }
+        ];
+
+        const groups = {};
+        awardsData.forEach(item => {
+            const year = item.date.split('.')[0];
+            if (!groups[year]) groups[year] = [];
+            groups[year].push(item);
+        });
+        const sortedYears = Object.keys(groups).sort((a,b) => b - a);
+
+        let win = 0, nom = 0;
+        awardsData.forEach(item => {
+            if (item.result === "获奖") win++;
+            else if (item.result === "提名") nom++;
+        });
+        document.getElementById('winCount').innerText = win;
+        document.getElementById('nomCount').innerText = nom;
+        document.getElementById('totalCount').innerText = awardsData.length;
+
+        const navList = document.getElementById('yearNav').querySelector('ul');
+        sortedYears.forEach(year => {
+            const li = document.createElement('li');
+            li.textContent = year;
+            li.setAttribute('data-year', year);
+            li.addEventListener('click', () => {
+                document.querySelector(`.award-year-group[data-year="${year}"]`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.year-nav li').forEach(l => l.classList.remove('active'));
+                li.classList.add('active');
+            });
+            navList.appendChild(li);
+        });
+        if (navList.firstChild) navList.firstChild.classList.add('active');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const year = entry.target.getAttribute('data-year');
+                    document.querySelectorAll('.year-nav li').forEach(li => {
+                        li.classList.remove('active');
+                        if (li.getAttribute('data-year') === year) li.classList.add('active');
+                    });
+                }
+            });
+        }, { threshold: 0.5, rootMargin: '-80px 0px 0px 0px' });
+
+        const streamContainer = document.getElementById('awardsStream');
+        sortedYears.forEach(year => {
+            const yearGroup = document.createElement('div');
+            yearGroup.className = 'award-year-group';
+            yearGroup.setAttribute('data-year', year);
+            yearGroup.innerHTML = `<div class="year-title">${year}</div><div class="award-cards"></div>`;
+            const cardsContainer = yearGroup.querySelector('.award-cards');
+            groups[year].forEach(item => {
+                const resultClass = item.result === '获奖' ? 'result-win-new' : 'result-nom-new';
+                const workHtml = item.work ? `<span class="award-work-new">${item.work}</span>` : '';
+                const dateParts = item.date.split('.');
+                const dateDisplay = dateParts.slice(1).join('.');
+                const card = document.createElement('div');
+                card.className = 'award-card-new';
+                card.innerHTML = `
+                    <div class="award-icon">${item.result === '获奖' ? '🏆' : '📋'}</div>
+                    <div class="award-info">
+                        <div class="award-name-new">${item.name}</div>
+                        <div class="award-meta">
+                            ${workHtml}
+                            <span class="award-result-new ${resultClass}">${item.result}</span>
+                        </div>
+                    </div>
+                    <div class="award-date-right">${dateDisplay}</div>
+                `;
+                cardsContainer.appendChild(card);
+            });
+            streamContainer.appendChild(yearGroup);
+            observer.observe(yearGroup);
+        });
+    </script>
+</body>
+</html>

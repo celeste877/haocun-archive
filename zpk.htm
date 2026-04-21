@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>作品库 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="刘浩存电影作品库：一秒钟、送你一朵小红花、悬崖之上、四海、龙马精神、灿烂的她等。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        /* 页面标题 */
+        .page-header {
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Noto Serif SC', '宋体', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .page-header p {
+            margin-top: 1rem;
+            color: black;
+        }
+
+        /* 筛选栏 */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0 2rem;
+            background: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .filter-btn {
+            background: var(--gray-light);
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--charcoal);
+        }
+        .filter-btn.active {
+            background: var(--crimson);
+            color: white;
+        }
+        .filter-btn:hover:not(.active) {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .search-box input {
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-size: 0.85rem;
+            width: 200px;
+        }
+        .search-box input:focus {
+            border-color: var(--gold);
+        }
+        .search-box button {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* 作品网格 */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .movie-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+        }
+        .movie-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold);
+        }
+        .movie-poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .movie-info {
+            padding: 1rem;
+        }
+        .movie-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--crimson);
+        }
+        .movie-year {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+        }
+        .movie-rating {
+            font-size: 0.85rem;
+            color: var(--gray-mid);
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .movie-rating span {
+            color: var(--gold);
+        }
+
+        /* 暂无数据提示 */
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-mid);
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--white);
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gray-mid);
+        }
+        .modal-close:hover {
+            color: var(--crimson);
+        }
+        .modal h2 {
+            font-family: 'Noto Serif SC', serif;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
+        }
+        .modal-meta {
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+        .modal-detail {
+            margin-bottom: 1rem;
+        }
+        .modal-detail strong {
+            color: var(--crimson);
+        }
+        .watch-btn {
+            display: inline-block;
+            background: var(--crimson);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .watch-btn:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
+        .watch-btn.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* 相关链接区域 */
+        .links-section {
+            padding: 2rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .links-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .links-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 640px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 24px;
+            }
+            .search-box {
+                justify-content: center;
+            }
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+            <ul class="nav-links">
+                <li><a href="sy.htm">首页</a></li>
+                <li><a href="rwjj.htm">人物档案</a></li>
+                <li><a href="zpk.htm" class="active">作品库</a></li>
+                <li><a href="ryjx.htm">荣誉奖项</a></li>
+                <li><a href="xssy.htm">学术视野</a></li>
+                <li><a href="gywm.htm">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>作品库</h1>
+                <p>刘浩存电影作品全记录 · 共9部</p>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="filter-btn active" data-year="all">全部</button>
+                    <button class="filter-btn" data-year="2020">2020</button>
+                    <button class="filter-btn" data-year="2021">2021</button>
+                    <button class="filter-btn" data-year="2022">2022</button>
+                    <button class="filter-btn" data-year="2023">2023</button>
+                    <button class="filter-btn" data-year="2024">2024</button>
+                    <button class="filter-btn" data-year="2025">2025</button>
+                    <button class="filter-btn" data-year="2026">2026</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索片名、角色...">
+                    <button id="searchBtn">搜索</button>
+                </div>
+            </div>
+
+            <div id="moviesGrid" class="movies-grid"></div>
+        </div>
+
+        <!-- 相关链接模块 -->
+        <div class="links-section">
+            <div class="container">
+                <div class="links-title">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面作品数据持续更新，海报图片为示意，实际以官方海报为准。</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // 作品数据（包含按时间顺序的图片绝对路径）
+        const moviesData = [
+            {
+                title: "《一秒钟》",
+                titleEn: "One Second",
+                year: 2020,
+                role: "刘闺女",
+                coStars: "张译、范伟、余皑磊",
+                director: "张艺谋",
+                plot: "二十世纪七十年代中期，为了观看一场电影，逃犯张九声与流浪儿刘闺女因电影结下不解之缘。刘浩存饰演的刘闺女是一个为了给弟弟做灯罩而偷胶片、倔强又善良的流浪女孩。",
+                rating: 7.7,
+                poster: "/9.jpg",
+                watchUrl: "https://www.bilibili.com/bangumi/play/ep376368"
+            },
+            {
+                title: "《送你一朵小红花》",
+                titleEn: "A Little Red Flower",
+                year: 2020,
+                role: "马小远",
+                coStars: "易烊千玺、朱媛媛、高亚麟、夏雨、岳云鹏",
+                director: "韩延",
+                plot: "两个抗癌家庭的故事，身患脑肿瘤的少年韦一航在病友会上结识了乐观开朗的女孩马小远，两人相互陪伴，一起探索世界、对抗病魔，传递着温暖与希望。",
+                rating: 7.2,
+                poster: "/7.jpg",
+                watchUrl: "https://v.qq.com/x/cover/mzc00200oxq32bf/a00361knb0n.html"
+            },
+            {
+                title: "《悬崖之上》",
+                titleEn: "Cliff Walkers",
+                year: 2021,
+                role: "张兰",
+                coStars: "张译、于和伟、秦海璐、朱亚文、倪大红、李乃文、余皑磊",
+                director: "张艺谋",
+                plot: "上世纪三十年代，四名共产党特工潜入伪满洲国执行秘密任务，刘浩存饰演的小兰是特工小组中最年轻的成员，在危机四伏的环境中，与战友们一起完成代号“乌特拉”的行动。",
+                rating: 7.4,
+                poster: "/10.jpg",
+                watchUrl: "https://www.iqiyi.com/v_25a0rbs0ar4.html"
+            },
+            {
+                title: "《四海》",
+                titleEn: "Only Fools Rush In",
+                year: 2022,
+                role: "周欢颂",
+                coStars: "刘昊然、沈腾、尹正、乔杉、周奇、张宥浩",
+                director: "韩寒",
+                plot: "擅长摩托车特技的少年吴仁耀与旅馆服务员周欢颂相识相恋，两人一起离开海岛闯荡大城市，却在现实的冲击下经历了成长与遗憾的故事。",
+                rating: 5.6,
+                poster: "/17.jpg",
+                watchUrl: "https://www.bilibili.com/bangumi/play/ep493071?theme=movie&spm_id_from=333.337.0.0"
+            },
+            {
+                title: "《龙马精神》",
+                titleEn: "Ride On",
+                year: 2023,
+                role: "罗小宝",
+                coStars: "成龙、郭麒麟、吴京、余皑磊、容祖儿",
+                director: "杨子",
+                plot: "生活落魄的武行老罗想把爱马“赤兔”培养成动作明星，却深陷官司，只能求助多年未见的女儿罗小宝和她的律师男友，小宝一边帮父亲打官司，一边劝说父亲放弃危险动作，展现了父女间的温情与羁绊。",
+                rating: 5.8,
+                poster: "/18.jpg",
+                watchUrl: "https://v.qq.com/x/cover/mzc00200kzadcff/x0046ik7mf5.html"
+            },
+            {
+                title: "《念念相忘》",
+                titleEn: "Just For Meeting You",
+                year: 2023,
+                role: "许念念",
+                coStars: "宋威龙、卜冠今、郭丞、高亚麟、倪虹洁",
+                director: "刘雨霖",
+                plot: "转校生许念念与少年杨燚因误会结下梁子，水火不容的两人在相处中逐渐了解彼此，共同经历青春趣事，在懵懂的情愫与现实抉择中，留下了关于青春的遗憾与成长。",
+                rating: 6.9,
+                poster: "/19.jpg",
+                watchUrl: "https://www.iqiyi.com/v_1c11a9l36po.html"
+            },
+            {
+                title: "《灿烂的她》",
+                titleEn: "Nian Can Lan De Ta",
+                year: 2024,
+                role: "徐嘉怡/李斯然",
+                coStars: "惠英红、张子贤、刘欢、苇青",
+                director: "徐伟",
+                plot: "慈祥的奶奶江秀枝与走失十二年的孙女徐嘉怡重逢，祖孙二人从生疏到彼此依偎，相处中徐嘉怡的秘密逐渐被揭开，展现了超越血缘的亲情与双向救赎。",
+                rating: 5.9,
+                poster: "/8.jpg",
+                watchUrl: "https://www.bilibili.com/bangumi/play/ep819995?theme=movie&spm_id_from=333.337.0.0"
+            },
+            {
+                title: "《想飞的女孩》",
+                titleEn: "Girls on Wire",
+                year: 2025,
+                role: "田恬",
+                coStars: "文淇、张宥浩、刘奕铁、杨皓宇、耿乐",
+                director: "文晏",
+                plot: "拼死逃离毒窟的田恬走投无路，前去寻找已决裂五年的表姐方笛，两人在困境中重新产生交集，共同面对危机，讲述了一对表姐妹二十余年的成长与救赎。",
+                rating: 5.4,
+                poster: "/20.jpg",
+                watchUrl: "https://www.bilibili.com/bangumi/play/ep1582869?theme=movie&spm_id_from=333.337.0.0"
+            },
+            {
+                title: "《消失的人》",
+                titleEn: "The Vanished",
+                year: 2026,
+                role: "林雨彤",
+                coStars: "郑恺、邱泽、李晨、姜妍、黄小蕾",
+                director: "程伟豪",
+                plot: "同一小区里，儿童失踪、深夜入侵、尸体藏匿三起看似无关的谜案，独居女孩林雨彤被卷入其中，随着调查深入，小区里每个看似寻常的居民都有着不可告人的秘密。",
+                rating: null,
+                poster: "/21.jpg",
+                watchUrl: null,
+                yearDisplay: "2026（定档5月1日）"
+            }
+        ];
+
+        function getPosterHtml(movie) {
+            if (movie.poster) {
+                return `<img src="${movie.poster}" alt="${movie.title}">`;
+            } else {
+                return `<div style="width:100%;height:100%;background:#e8e8e8;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#999;">🎬</div>`;
+            }
+        }
+
+        let currentFilter = "all";
+        let currentKeyword = "";
+
+        function renderMovies() {
+            const grid = document.getElementById("moviesGrid");
+            let filtered = moviesData.filter(movie => {
+                if (currentFilter !== "all" && movie.year != currentFilter) return false;
+                if (currentKeyword) {
+                    const keyword = currentKeyword.toLowerCase();
+                    return movie.title.toLowerCase().includes(keyword) || 
+                           movie.role.toLowerCase().includes(keyword) ||
+                           (movie.titleEn && movie.titleEn.toLowerCase().includes(keyword));
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="no-data">没有找到相关作品</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(movie => {
+                const yearDisplay = movie.yearDisplay || movie.year;
+                const ratingDisplay = movie.rating ? `${movie.rating} 分` : "待上映";
+                return `
+                    <div class="movie-card" data-id="${moviesData.indexOf(movie)}">
+                        <div class="movie-poster">
+                            ${getPosterHtml(movie)}
+                        </div>
+                        <div class="movie-info">
+                            <div class="movie-title">${movie.title}</div>
+                            <div class="movie-year">${yearDisplay}</div>
+                            <div class="movie-rating">
+                                ${movie.rating ? `<span>⭐</span> ${ratingDisplay}` : '<span>📅</span> 待上映'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            document.querySelectorAll(".movie-card").forEach(card => {
+                card.addEventListener("click", (e) => {
+                    const id = parseInt(card.dataset.id);
+                    showModal(id);
+                });
+            });
+        }
+
+        function showModal(index) {
+            const movie = moviesData[index];
+            if (!movie) return;
+            const yearDisplay = movie.yearDisplay || movie.year;
+            const ratingDisplay = movie.rating ? `${movie.rating} 分` : "待上映";
+            const watchButton = movie.watchUrl ? 
+                `<a href="${movie.watchUrl}" target="_blank" rel="noopener noreferrer" class="watch-btn">🎬 在线观看</a>` : 
+                `<span class="watch-btn disabled">📅 暂无资源</span>`;
+            const modalBody = document.getElementById("modalBody");
+            modalBody.innerHTML = `
+                <h2>${movie.title} <span style="font-size:1rem; color:var(--gold);">${movie.titleEn ? movie.titleEn : ""}</span></h2>
+                <div class="modal-meta">${yearDisplay} · 饰演 ${movie.role}</div>
+                <div class="modal-detail"><strong>导演：</strong> ${movie.director}</div>
+                <div class="modal-detail"><strong>合作演员：</strong> ${movie.coStars}</div>
+                <div class="modal-detail"><strong>剧情简介：</strong> ${movie.plot}</div>
+                <div class="modal-detail"><strong>豆瓣评分：</strong> ${ratingDisplay}</div>
+                <div>${watchButton}</div>
+            `;
+            document.getElementById("modal").classList.add("active");
+        }
+
+        document.querySelector(".modal-close").addEventListener("click", () => {
+            document.getElementById("modal").classList.remove("active");
+        });
+        document.getElementById("modal").addEventListener("click", (e) => {
+            if (e.target === document.getElementById("modal")) {
+                document.getElementById("modal").classList.remove("active");
+            }
+        });
+
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentFilter = btn.dataset.year;
+                renderMovies();
+            });
+        });
+
+        function performSearch() {
+            currentKeyword = document.getElementById("searchInput").value.trim();
+            renderMovies();
+        }
+        document.getElementById("searchBtn").addEventListener("click", performSearch);
+        document.getElementById("searchInput").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") performSearch();
+        });
+
+        renderMovies();
+    </script>
+</body>
+</html>

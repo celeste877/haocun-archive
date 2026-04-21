@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>关于我们 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">                     
+    <meta name="description" content="基于语义网技术的刘浩存电影数字档案馆——项目介绍、技术架构、版权声明。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 - 与首页一致 */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        /* 页面标题区 - 无背景图 */
+        .page-header {
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Noto Serif SC', '宋体', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+            transition: var(--transition);
+        }
+        .content-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title .icon {
+            font-size: 1.8rem;
+        }
+        .content-text {
+            font-size: 1rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .tech-item {
+            background: var(--gray-light);
+            border-radius: 20px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .tech-item:hover {
+            transform: translateY(-4px);
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+        .tech-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tech-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
+        }
+        .tech-desc {
+            font-size: 0.85rem;
+            color: #000000;
+        }
+        .contact-info {
+            background: var(--gold-light);
+            border-radius: 20px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+        }
+        .contact-link:hover {
+            background: var(--crimson);
+            color: white;
+        }
+        @media (max-width: 900px) {
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 外部链接 */
+        .links-section {
+            padding: 2rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+            <ul class="nav-links">
+                <li><a href="sy.htm">首页</a></li>
+                <li><a href="rwjj.htm">人物档案</a></li>
+                <li><a href="zpk.htm">作品库</a></li>
+                <li><a href="ryjx.htm">荣誉奖项</a></li>
+                <li><a href="xssy.htm">学术视野</a></li>
+                <li><a href="gywm.htm" class="active">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>关于我们</h1>
+            </div>
+
+            <!-- 项目介绍（完善文字） -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>项目介绍</span>
+                </div>
+                <div class="content-text">
+                    <p>刘浩存电影数字档案馆是一个基于语义网技术构建的知识化电影档案平台。我们以青年演员刘浩存及其参演电影为切入点，系统梳理其电影作品、演艺经历、荣誉奖项等数据，并运用语义网技术（RDF、SPARQL、JSON-LD）将异构数据转化为机器可理解的关联数据。</p>
+                    <p style="margin-top: 0.8rem;">项目围绕“从胶片数字化到档案知识化”的核心理念，设计轻量级电影本体，建立电影、演员、导演、角色、奖项等实体之间的语义关系。通过数据互联，用户可以探索刘浩存与不同导演、演员的合作网络，追溯其作品的时间脉络与艺术风格演变。</p>
+                    <p style="margin-top: 0.8rem;">本站旨在为影迷、学者和数字人文研究者提供一个可查询、可复用、可推理的电影知识库，推动电影档案从静态存储走向智能服务，探索语义网在影视文化遗产领域的创新应用。</p>
+                </div>
+            </div>
+
+            <!-- 项目愿景（完善文字） -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>项目愿景</span>
+                </div>
+                <div class="content-text">
+                    <p>我们期待建立一个开放、互联、可持续的电影知识生态，让电影数据不仅被保存，更能被理解、链接和发现。未来，我们希望将本档案馆拓展为涵盖更多演员、导演、电影作品的知识网络，并与外部语义数据集（如 Wikidata、DBpedia）实现互通。</p>
+                    <p style="margin-top: 0.8rem;">同时，我们将持续优化知识图谱可视化与语义检索功能，降低用户查询门槛，并开放数据接口，鼓励研究者、开发者共同参与内容共建与技术创新，让数字人文真正融入电影文化遗产保护与传播之中。</p>
+                </div>
+            </div>
+
+            <!-- 技术架构 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>技术架构</span>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-icon"></div>
+                        <div class="tech-title">语义本体</div>
+                        <div class="tech-desc">定义电影、演员、导演、角色、奖项等类，以及参演、获奖、拍摄等属性关系，构建轻量级电影本体。</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"></div>
+                        <div class="tech-title">关联数据</div>
+                        <div class="tech-desc">采用 JSON-LD 格式嵌入结构化数据，支持 RDF 序列化，提供 SPARQL 查询接口（规划中）。</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"></div>
+                        <div class="tech-title">知识图谱</div>
+                        <div class="tech-desc">利用开源可视化库展示刘浩存与作品、导演、演员的合作网络，实现交互式图谱浏览。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据来源与版权声明 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>数据来源与版权声明</span>
+                </div>
+                <div class="content-text">
+                    <p>电影信息、获奖数据、人物资料主要来源于：百度百科、豆瓣电影、IMDb、猫眼电影及公开新闻报道。所有数据均经过人工整理与校对，仅供学术研究与非商业使用。</p>
+                    <p style="margin-top: 0.8rem;">本网站为非营利性个人学术项目，所有电影海报、剧照、图片版权归原电影制片方所有。如有版权问题或数据错误，请联系我们，我们将及时处理。</p>
+                </div>
+            </div>
+
+            <!-- 联系方式 -->
+            <div class="content-card">
+                <div class="section-title">
+                    <span class="icon"></span>
+                    <span>联系与反馈</span>
+                </div>
+                <div class="contact-info">
+                    <a href="mailto:195019192@qq.com" class="contact-link">
+                        <span></span> 195019192@qq.com
+                    </a>
+                    <a href="#" class="contact-link" style="pointer-events: none; opacity: 0.6;">
+                        <span></span> GitHub (建设中)
+                    </a>
+                </div>
+                <div class="content-text" style="margin-top: 1rem; text-align: center;">
+                    <p>如果您对项目有任何建议，或发现数据错误，欢迎通过邮件联系我们。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 外部链接（与首页相同） -->
+        <div class="links-section">
+            <div class="container">
+                <div class="section-title" style="font-family: 'Noto Serif SC', serif; font-size: 1.6rem; font-weight: 700; color: var(--crimson); margin-bottom: 1.5rem;">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面使用语义化HTML5、现代CSS布局，并内嵌JSON-LD结构化数据。</p>
+    </footer>
+</body>
+</html>

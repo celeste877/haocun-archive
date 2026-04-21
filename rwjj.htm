@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>人物档案 · 刘浩存 | 电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="刘浩存个人档案：演艺生涯、代表作品、荣誉奖项。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 - 与首页完全一致 */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;      /* 改为 700，与首页一致 */
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        /* 人物简介区：左侧小图，右侧文字 */
+        .profile-section {
+            padding: 3rem 0 2rem;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .profile-photo {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .profile-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .profile-photo:hover img {
+            transform: scale(1.02);
+        }
+        .profile-text h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
+        }
+        .profile-tagline {
+            font-size: 1rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+            border-left: 3px solid var(--gold);
+            padding-left: 0.8rem;
+            font-weight: 700;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .profile-bio {
+            font-size: 1rem;
+            color: var(--black-mid);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .info-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem 1.5rem;
+        }
+        .info-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.4rem;
+        }
+        .info-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .info-value {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.2rem;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        /* 演艺经历 - 横向滚动卡片 */
+        .career-section {
+            padding: 2rem 0;
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+        }
+        .timeline-horizontal {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding: 0.5rem 0.2rem 1.5rem;
+            scrollbar-width: thin;
+        }
+        .timeline-horizontal::-webkit-scrollbar {
+            height: 4px;
+        }
+        .timeline-horizontal::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 4px;
+        }
+        .timeline-horizontal::-webkit-scrollbar-thumb {
+            background: var(--crimson);
+            border-radius: 4px;
+        }
+        .timeline-card {
+            flex: 0 0 150px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid rgba(155,44,29,0.05);
+        }
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold-light);
+        }
+        .timeline-year {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--crimson);
+            font-family: 'Noto Serif SC', serif;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-desc {
+            font-size: 0.8rem;
+            color: var(--gray-mid);
+            line-height: 1.4;
+        }
+
+        /* 代表作品网格 */
+        .works-section {
+            padding: 4rem 0;
+            background: var(--white);
+        }
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .work-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 2 / 3;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .work-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .work-card:hover .work-img {
+            transform: scale(1.03);
+        }
+        .work-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 1rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .work-card:hover .work-overlay {
+            transform: translateY(0);
+        }
+        .work-overlay h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .work-overlay p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* 荣誉奖项列表 */
+        .awards-section {
+            padding: 4rem 0;
+        }
+        .awards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .award-row {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .award-row:hover {
+            transform: translateX(6px);
+            border-left: 3px solid var(--gold);
+        }
+        .award-icon {
+            font-size: 1.5rem;
+            width: 48px;
+        }
+        .award-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        .award-year {
+            color: var(--crimson);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* 外部链接 - 简约胶囊 */
+        .links-section {
+            padding: 3rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.6rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .profile-grid {
+                grid-template-columns: 220px 1fr;
+                gap: 2rem;
+            }
+            .works-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .profile-photo {
+                max-width: 240px;
+                margin: 0 auto;
+            }
+            .info-list {
+                grid-template-columns: 1fr;
+            }
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline-card {
+                flex: 0 0 220px;
+            }
+            .links-grid {
+                gap: 0.8rem;
+            }
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+            <ul class="nav-links">
+                <li><a href="sy.htm">首页</a></li>
+                <li><a href="rwjj.htm" class="active">人物档案</a></li>
+                <li><a href="zpk.htm">作品库</a></li>
+                <li><a href="ryjx.htm">荣誉奖项</a></li>
+                <li><a href="xssy.htm">学术视野</a></li>
+                <li><a href="gywm.htm">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- 人物简介区：左侧小图，右侧文字 -->
+            <div class="profile-section">
+                <div class="profile-grid">
+                    <div class="profile-photo">
+                        <img src="/6.jpg" alt="刘浩存肖像">
+                    </div>
+                    <div class="profile-text">
+                        <h1>刘浩存（Haocun Liu）</h1>
+                        <div class="profile-tagline">演员 · 舞者</div>
+                        <p class="profile-bio">中国内地新生代演员，毕业于北京舞蹈学院中国民族民间舞系。2018年7月，还在上大学的刘浩存被张艺谋导演挖掘，成为首位“00后谋女郎”。2020年凭借张艺谋导演的《一秒钟》出道，以清澈灵动的表演风格迅速获得观众与业界认可。她善于用细腻的肢体语言和眼神传递情感，塑造了多个令人难忘的银幕角色。</p>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <div class="info-label">出生日期</div>
+                                <div class="info-value">2000年5月20日</div>
+                            </div>
+                             <div class="info-item">
+                                <div class="info-label">民族</div>
+                                <div class="info-value">汉</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">籍贯</div>
+                                <div class="info-value">吉林省通化市</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">毕业院校</div>
+                                <div class="info-value">北京舞蹈学院</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">出道作品</div>
+                                <div class="info-value">《一秒钟》(2020)</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">粉丝名称</div>
+                                <div class="info-value">星存</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 演艺经历 - 更新为完整数据 -->
+            <div class="career-section">
+                <div class="section-title">演艺经历</div>
+                <div class="timeline-horizontal">
+                    <div class="timeline-card">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-title">《一秒钟》</div>
+                        <div class="timeline-desc">饰演 刘闺女 · 银幕出道作（2018年拍摄）</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-title">《送你一朵小红花》</div>
+                        <div class="timeline-desc">饰演 马小远 · 提名金鸡奖最佳女主角</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2021</div>
+                        <div class="timeline-title">《悬崖之上》</div>
+                        <div class="timeline-desc">饰演 张兰 · 张艺谋执导谍战片</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2022</div>
+                        <div class="timeline-title">《四海》</div>
+                        <div class="timeline-desc">饰演 周欢颂 · 韩寒导演作品</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-title">《龙马精神》</div>
+                        <div class="timeline-desc">饰演 罗小宝 · 与成龙合作</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-title">《念念相忘》</div>
+                        <div class="timeline-desc">饰演 许念念 · 青春校园题材</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-title">《灿烂的她》</div>
+                        <div class="timeline-desc">饰演 徐嘉怡 / 李斯然 · 票房突破1亿</div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-year">2026</div>
+                        <div class="timeline-title">《想飞的女孩》</div>
+                        <div class="timeline-desc">饰演 田恬 · 2025年柏林主竞赛入围</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 代表作品（全宽背景）- 添加了点击跳转链接 -->
+        <div class="works-section">
+            <div class="container">
+                <div class="section-title">代表作品</div>
+                <div class="works-grid">
+                    <a href="https://v.qq.com/x/cover/mzc00200oxq32bf/a00361knb0n.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+                        <div class="work-card">
+                            <img class="work-img" src="/7.jpg" alt="一秒钟">
+                            <div class="work-overlay">
+                                <h4>《送你一朵小红花》</h4>
+                                <p>2020 · 马小远</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.bilibili.com/bangumi/play/ep819995?theme=movie&spm_id_from=333.337.0.0" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+                        <div class="work-card">
+                            <img class="work-img" src="/8.jpg" alt="送你一朵小红花">
+                            <div class="work-overlay">
+                                <h4>《灿烂的她》</h4>
+                                <p>2024 · 徐嘉怡、李斯然</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.bilibili.com/bangumi/play/ep376368?theme=movie&spm_id_from=333.337.0.0" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+                        <div class="work-card">
+                            <img class="work-img" src="/9.jpg" alt="悬崖之上">
+                            <div class="work-overlay">
+                                <h4>《一秒钟》</h4>
+                                <p>2020 · 刘闺女</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.iqiyi.com/v_25a0rbs0ar4.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block;">
+                        <div class="work-card">
+                            <img class="work-img" src="/10.jpg" alt="四海">
+                            <div class="work-overlay">
+                                <h4>《悬崖之上》</h4>
+                                <p>2021 · 张兰</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 外部链接 -->
+        <div class="links-section">
+            <div class="container">
+                <div class="section-title">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面使用语义化HTML5、现代CSS布局，并内嵌JSON-LD结构化数据。</p>
+    </footer>
+</body>
+</html>
