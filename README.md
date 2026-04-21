@@ -19,9 +19,3 @@
 - 9部电影作品
 - 38项荣誉奖项
 - 40+ 合作演员
-
-## 访问地址
-https://celeste877.github.io/hancun archive/
-
-## 许可证
-本项目为学术研究项目，遵循 CC BY-NC 4.0 许可协议。
