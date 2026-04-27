@@ -52,7 +52,7 @@
             padding: 0 2rem;
         }
 
-        /* 导航栏 - 原来的绝对定位居中 */
+        /* 导航栏 - 增加下拉菜单样式 */
         .page-header {
             background: var(--white);
             box-shadow: var(--shadow-sm);
@@ -96,6 +96,10 @@
             transform: translateX(-50%);
         }
 
+        .nav-links li {
+            position: relative;
+        }
+
         .nav-links a {
             text-decoration: none;
             font-weight: 700;
@@ -121,6 +125,45 @@
             border-radius: 2px;
         }
 
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -133,6 +176,11 @@
                 margin-top: 0.8rem;
                 flex-wrap: wrap;
                 gap: 1rem;
+            }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
             }
         }
 
@@ -527,8 +575,15 @@
                         <li><a href="rwjj.htm">人物档案</a></li>
                         <li><a href="zpk.htm">作品库</a></li>
                         <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="yxdc.htm">影像典藏</a></li>
                         <li><a href="xssy.htm">学术视野</a></li>
-                        <li><a href="gywm.htm">关于我们</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -537,7 +592,7 @@
 
     <main>
         <section class="hero">
-            <img src="1.jpg" alt="刘浩存" class="hero-bg-img">
+            <img src="/1.jpg" alt="刘浩存" class="hero-bg-img">
             <div class="container hero-content">
                 <h1>刘浩存电影数字档案馆</h1>
                 <p>从胶片数字化到档案知识化 · 基于语义网技术的智能电影档案平台</p>
@@ -548,28 +603,28 @@
             <div class="cards-title">探索更多</div>
             <div class="cards-grid">
                 <article class="float-card" data-url="rwjj.htm">
-                    <img class="card-img" src="2.jpg" alt="刘浩存人物档案">
+                    <img class="card-img" src="/2.jpg" alt="刘浩存人物档案">
                     <div class="card-content">
                         <h4>人物档案</h4>
                         <p>刘浩存·演艺生涯</p>
                     </div>
                 </article>
                 <article class="float-card" data-url="zpk.htm">
-                    <img class="card-img" src="3.jpg" alt="刘浩存作品库">
+                    <img class="card-img" src="/3.jpg" alt="刘浩存作品库">
                     <div class="card-content">
                         <h4>作品库</h4>
                         <p>电影·全记录</p>
                     </div>
                 </article>
                 <article class="float-card" data-url="ryjx.htm">
-                    <img class="card-img" src="4.jpg" alt="刘浩存荣誉奖项">
+                    <img class="card-img" src="/4.jpg" alt="刘浩存荣誉奖项">
                     <div class="card-content">
                         <h4>荣誉奖项</h4>
                         <p>获奖·提名</p>
                     </div>
                 </article>
                 <article class="float-card" data-url="xssy.htm">
-                    <img class="card-img" src="5.jpg" alt="刘浩存学术探索">
+                    <img class="card-img" src="/5.jpg" alt="刘浩存学术探索">
                     <div class="card-content">
                         <h4>学术视野</h4>
                         <p>知识图谱等</p>
