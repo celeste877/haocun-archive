@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>角色小传 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="刘浩存电影角色小传——每个角色都是一个独特的世界。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f5f5f5;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 - 原样，增加下拉菜单 */
+        .page-header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        /* 导航链接容器 - 绝对定位居中（原样式） */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
+        /* 响应式：窄屏时下拉菜单位置调整 */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
+            }
+        }
+
+        /* ========= 页面标题 ========= */
+        .page-title {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+        .page-title h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-title h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .page-title p {
+            margin-top: 1rem;
+            color: var(--gray-mid);
+        }
+
+        /* 角色卡片网格 */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 4rem;
+        }
+
+        /* 卡片样式 */
+        .role-card {
+            background: var(--white);
+            border-radius: 28px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+        .role-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold-light);
+        }
+        .role-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #e0e0e0;
+        }
+        .role-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .role-card:hover .role-img img {
+            transform: scale(1.02);
+        }
+        .role-info {
+            padding: 1.2rem 1.2rem 0.8rem;
+        }
+        .role-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 0.2rem;
+        }
+        .role-film {
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        .role-desc {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        .role-quote {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--gray-mid);
+            border-left: 3px solid var(--gold);
+            padding-left: 0.8rem;
+            margin: 0.5rem 0;
+        }
+
+        /* 留言区 */
+        .comment-section {
+            padding: 0.8rem 1.2rem 1.2rem;
+            background: var(--gray-light);
+            border-top: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+        .comment-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .comment-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 0.8rem;
+            font-size: 0.8rem;
+        }
+        .comment-item {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 0.5rem 0.7rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .comment-author {
+            font-weight: 600;
+            color: var(--crimson);
+            font-size: 0.75rem;
+            margin-bottom: 0.2rem;
+        }
+        .comment-text {
+            color: var(--charcoal);
+            font-size: 0.75rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .comment-form input,
+        .comment-form textarea {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            border-color: var(--gold);
+        }
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .comment-form button {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.4rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .comment-form button:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
+
+        @media (max-width: 768px) {
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="container">
+            <div class="navbar">
+                <div class="nav-container">
+                    <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+                    <ul class="nav-links">
+                        <li><a href="sy.htm">首页</a></li>
+                        <li><a href="rwjj.htm">人物档案</a></li>
+                        <li><a href="zpk.htm">作品库</a></li>
+                        <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="yxdc.htm">影像典藏</a></li>
+                        <li><a href="xssy.htm">学术视野</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>角色小传</h1>
+                <p>每个角色都是一个独特的世界 · 欢迎留下你的时空对话</p>
+            </div>
+            <div id="rolesContainer" class="roles-grid"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">留言仅保存在您的浏览器中，欢迎留下对角色最真挚的感受。</p>
+    </footer>
+
+    <script>
+        // ==================== 角色数据 ====================
+        const rolesData = [
+            {
+                id: 0,
+                name: "刘闺女",
+                film: "《一秒钟》",
+                desc: "为了给弟弟做灯罩而偷胶片的流浪女孩，倔强、善良、孤独，在那个特殊的年代里，与张九声因电影结下不解之缘。",
+                quote: "我叫刘闺女，弟弟叫刘弟弟，没爸没妈，派出所随便给起的。",
+                img: "42.jpg"
+            },
+            {
+                id: 1,
+                name: "马小远",
+                film: "《送你一朵小红花》",
+                desc: "身患脑肿瘤却依然乐观开朗的女孩，用她的热情感染了韦一航，带他探索世界，教会他珍惜当下。",
+                quote: "生活很苦，但不要放弃爱与希望。。",
+                img: "7.jpg"
+            },
+            {
+                id: 2,
+                name: "张兰",
+                film: "《悬崖之上》",
+                desc: "代号为“小兰”的特工，年纪最小却异常坚韧，在执行“乌特拉”行动中展现出不输前辈的勇气与智慧。",
+                quote: "天亮了就好了。",
+                img: "140.jpg"
+            },
+            {
+                id: 3,
+                name: "周欢颂",
+                film: "《四海》",
+                desc: "海岛旅馆的服务员，与吴仁耀相识相爱，两人一起离开海岛闯荡大城市，却经历了成长的遗憾与失去。",
+                quote: "我不喜欢黑，但是无论多晚，我会觉得，城市里总有一家店、一个屋子、一盏灯是为我留着的。",
+                img: "87.jpg"
+            },
+            {
+                id: 4,
+                name: "罗小宝",
+                film: "《龙马精神》",
+                desc: "武行老罗的女儿，一位律师，在父亲陷入官司后与多年未见的父亲重逢，逐渐理解并支持父亲的梦想。",
+                quote: "有些事，不是因为有意义才去做，而是做了才有意义。",
+                img: "91.jpg"
+            },
+            {
+                id: 5,
+                name: "许念念",
+                film: "《念念相忘》",
+                desc: "转校生，与少年杨燚因误会结下梁子，两人在青春岁月中从水火不容到彼此理解，留下了一段遗憾又美好的回忆。",
+                quote: "只要你想，我们就一定能做到。",
+                img: "97.jpg"
+            },
+            {
+                id: 6,
+                name: "徐嘉怡 / 李斯然",
+                film: "《灿烂的她》",
+                desc: "走失十二年的孙女，与奶奶重逢后从生疏到依偎，背后隐藏着秘密与伤疤，最终在亲情中得到救赎。",
+                quote: "以前一直觉得溺爱是一个贬义词，长大后才发现能被一个人溺爱，是一件多么幸运和奢侈的事情。",
+                img: "124.jpg"
+            },
+            {
+                id: 7,
+                name: "田恬",
+                film: "《想飞的女孩》",
+                desc: "拼死逃离毒窟的女孩，与决裂五年的表姐重逢，两人在困境中共同面对危机，完成了成长与救赎。",
+                quote: "他们说我该认命，可我想试试，看命认不认。",
+                img: "141.jpg"
+            },
+            {
+                id: 8,
+                name: "林雨彤",
+                film: "《消失的人》",
+                desc: "独居女孩，无意中被卷入小区里的连环谜案，随着调查深入，她发现每个看似寻常的邻居都有着不可告人的秘密。",
+                quote: "不管怎样，我还是要找出凶手。",
+                img: "133.jpg"
+            }
+        ];
+
+        function loadComments() {
+            const stored = localStorage.getItem("roleComments");
+            if (stored) return JSON.parse(stored);
+            const empty = {};
+            rolesData.forEach(role => { empty[role.id] = []; });
+            return empty;
+        }
+
+        function saveComments(comments) {
+            localStorage.setItem("roleComments", JSON.stringify(comments));
+        }
+
+        function addComment(roleId, author, text) {
+            if (!author.trim() || !text.trim()) return false;
+            const comments = loadComments();
+            if (!comments[roleId]) comments[roleId] = [];
+            comments[roleId].unshift({
+                author: author.trim(),
+                text: text.trim(),
+                timestamp: new Date().toLocaleString()
+            });
+            if (comments[roleId].length > 20) comments[roleId] = comments[roleId].slice(0, 20);
+            saveComments(comments);
+            return true;
+        }
+
+        function renderCommentList(comments) {
+            if (!comments.length) return '<div style="text-align:center; color:#aaa; font-size:0.75rem; padding:0.3rem;">暂无留言，来写下第一段时空对话吧～</div>';
+            return comments.map(c => `
+                <div class="comment-item">
+                    <div class="comment-author">${escapeHtml(c.author)} <span style="font-weight:normal; color:#aaa;">· ${c.timestamp}</span></div>
+                    <div class="comment-text">${escapeHtml(c.text)}</div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function renderRoles() {
+            const container = document.getElementById('rolesContainer');
+            const commentsData = loadComments();
+            container.innerHTML = '';
+            rolesData.forEach(role => {
+                const card = document.createElement('div');
+                card.className = 'role-card';
+                card.innerHTML = `
+                    <div class="role-img">
+                        <img src="${role.img}" alt="${role.name}" onerror="this.src='placeholder.jpg'">
+                    </div>
+                    <div class="role-info">
+                        <div class="role-name">${role.name}</div>
+                        <div class="role-film">${role.film}</div>
+                        <div class="role-desc">${role.desc}</div>
+                        <div class="role-quote">“${role.quote}”</div>
+                    </div>
+                    <div class="comment-section">
+                        <div class="comment-title">💬 时空对话</div>
+                        <div class="comment-list" id="comment-list-${role.id}">
+                            ${renderCommentList(commentsData[role.id] || [])}
+                        </div>
+                        <div class="comment-form">
+                            <input type="text" placeholder="你的名字" id="author-${role.id}" maxlength="20">
+                            <textarea placeholder="你想对 ${role.name} 说..." id="text-${role.id}" rows="2" maxlength="200"></textarea>
+                            <button data-id="${role.id}">✍️ 留言</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.querySelectorAll('.comment-form button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const roleId = parseInt(btn.getAttribute('data-id'));
+                    const authorInput = document.getElementById(`author-${roleId}`);
+                    const textInput = document.getElementById(`text-${roleId}`);
+                    if (addComment(roleId, authorInput.value, textInput.value)) {
+                        authorInput.value = '';
+                        textInput.value = '';
+                        renderRoles();
+                        const targetCard = document.querySelector(`.role-card .comment-form button[data-id="${roleId}"]`).closest('.role-card');
+                        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        alert('请填写姓名和留言内容');
+                    }
+                });
+            });
+        }
+
+        renderRoles();
+    </script>
+</body>
+</html>
