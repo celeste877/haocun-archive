@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>影像典藏 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="刘浩存电影影像典藏——每部作品宣传照与剧照集锦。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f5f5f5;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 35px -12px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #f8f6f0, #ece8e0);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ========= 导航栏 - 统一下拉菜单样式 ========= */
+        .page-header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
+            }
+        }
+
+        /* ========= 页面标题 ========= */
+        .page-title {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+        .page-title h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--crimson);
+            letter-spacing: -0.01em;
+            position: relative;
+            display: inline-block;
+        }
+        .page-title h1:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 3px;
+        }
+        .page-title p {
+            margin-top: 1.5rem;
+            color: #2a2a2a;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* 作品卡片 - 玻璃质感 */
+        .film-section {
+            margin: 4rem 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .film-section:hover {
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-4px);
+        }
+        .film-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.8rem 2rem;
+            background: linear-gradient(135deg, rgba(201,169,110,0.1) 0%, rgba(255,255,255,0.2) 100%);
+            border-left: 6px solid var(--gold);
+        }
+        .film-poster {
+            flex-shrink: 0;
+            width: 120px;
+            height: 180px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            background: #e0e0e0;
+            transition: transform 0.3s;
+        }
+        .film-poster:hover {
+            transform: scale(1.02);
+        }
+        .film-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .film-info {
+            flex: 1;
+        }
+        .film-info h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.3px;
+        }
+        .film-info .film-year {
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        .film-info .film-role {
+            font-size: 0.9rem;
+            color: #1a1a1a;
+            opacity: 0.8;
+        }
+        .film-gallery {
+            padding: 1.5rem 2rem 2rem;
+            background: transparent;
+            position: relative;
+        }
+        .film-gallery h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .film-gallery h3 .icon {
+            font-size: 1.2rem;
+        }
+
+        /* 横向滚动剧照 */
+        .stills-wrapper {
+            position: relative;
+        }
+        .stills-grid {
+            display: flex;
+            gap: 1.2rem;
+            overflow-x: auto;
+            padding-bottom: 0.8rem;
+            scrollbar-width: thin;
+            scroll-behavior: smooth;
+        }
+        .stills-grid::-webkit-scrollbar {
+            height: 4px;
+        }
+        .stills-grid::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        .stills-grid::-webkit-scrollbar-thumb {
+            background: var(--crimson);
+            border-radius: 4px;
+        }
+        .stills-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            pointer-events: none;
+            background: linear-gradient(to left, rgba(236,232,224,1), transparent);
+            border-radius: 20px;
+        }
+        .stills-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            pointer-events: none;
+            background: linear-gradient(to right, rgba(236,232,224,1), transparent);
+            border-radius: 20px;
+            z-index: 1;
+        }
+        .still-item {
+            flex: 0 0 auto;
+            width: 170px;
+            height: 170px;
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
+            background: #fff;
+            border: 2px solid transparent;
+        }
+        .still-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.25);
+            border-color: var(--gold);
+        }
+        .still-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .still-item:hover img {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .film-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .film-poster {
+                width: 100px;
+                height: 150px;
+            }
+            .film-info h2 {
+                font-size: 1.5rem;
+            }
+            .still-item {
+                width: 130px;
+                height: 130px;
+            }
+            .stills-wrapper::before,
+            .stills-wrapper::after {
+                width: 30px;
+            }
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-main {
+            position: relative;
+            display: inline-block;
+        }
+        .modal-main img {
+            max-width: 85vw;
+            max-height: 80vh;
+            border-radius: 24px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+        .modal-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            transition: 0.2s;
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-weight: 300;
+        }
+        .modal-nav-btn:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+            border-color: var(--gold);
+        }
+        .modal-nav-prev {
+            left: -80px;
+        }
+        .modal-nav-next {
+            right: -80px;
+        }
+        @media (max-width: 1000px) {
+            .modal-nav-prev { left: -50px; }
+            .modal-nav-next { right: -50px; }
+        }
+        @media (max-width: 700px) {
+            .modal-nav-prev { left: -30px; }
+            .modal-nav-next { right: -30px; }
+            .modal-nav-btn { font-size: 1.2rem; padding: 0.3rem 0.8rem; }
+        }
+        .modal-counter {
+            margin-top: 1.2rem;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: -10px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            opacity: 0.8;
+        }
+        .modal-close:hover {
+            opacity: 1;
+        }
+        .modal-caption {
+            display: none;
+        }
+
+        footer {
+            background: #1e1e1e;
+            color: #b0b0b0;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="container">
+            <div class="navbar">
+                <div class="nav-container">
+                    <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+                    <ul class="nav-links">
+                        <li><a href="sy.htm">首页</a></li>
+                        <li><a href="rwjj.htm">人物档案</a></li>
+                        <li><a href="zpk.htm">作品库</a></li>
+                        <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="gycy.htm" class="active">影像典藏</a></li>
+                        <li><a href="xssy.htm">学术视野</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>影像典藏</h1>
+                <p>宣传图·剧照</p>
+            </div>
+
+            <div id="filmsContainer"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">影像持续更新，点击剧照可放大并切换浏览。</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close">&times;</div>
+            <div class="modal-main">
+                <img id="modalImg" src="" alt="">
+                <button id="prevBtn" class="modal-nav-btn modal-nav-prev">◀</button>
+                <button id="nextBtn" class="modal-nav-btn modal-nav-next">▶</button>
+            </div>
+            <div class="modal-counter" id="modalCounter"></div>
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <script>
+        // 数据完全保持不变
+        const films = [
+            {
+                title: "一秒钟",
+                year: "2020",
+                role: "饰演 刘闺女",
+                poster: "9.jpg",
+                stills: Array.from({ length: 24 }, (_, i) => ({ src: `${35 + i}.jpg` }))
+            },
+            {
+                title: "送你一朵小红花",
+                year: "2020",
+                role: "饰演 马小远",
+                poster: "7.jpg",
+                stills: Array.from({ length: 10 }, (_, i) => ({ src: `${59 + i}.jpg` }))
+            },
+            {
+                title: "悬崖之上",
+                year: "2021",
+                role: "饰演 张兰",
+                poster: "10.jpg",
+                stills: [69,70,71,72,73,74,75].map(n => ({ src: `${n}.jpg` }))
+            },
+            {
+                title: "四海",
+                year: "2022",
+                role: "饰演 周欢颂",
+                poster: "17.jpg",
+                stills: [76,77,78,79,80,81,82,83,84,85,86,87,88].map(n => ({ src: `${n}.jpg` }))
+            },
+            {
+                title: "龙马精神",
+                year: "2023",
+                role: "饰演 罗小宝",
+                poster: "18.jpg",
+                stills: [89,90,91,92,93,94,95,96].map(n => ({ src: `${n}.jpg` }))
+            },
+            {
+                title: "念念相忘",
+                year: "2023",
+                role: "饰演 许念念",
+                poster: "19.jpg",
+                stills: Array.from({ length: 16 }, (_, i) => ({ src: `${97 + i}.jpg` }))
+            },
+            {
+                title: "灿烂的她",
+                year: "2024",
+                role: "饰演 徐嘉怡/李斯然",
+                poster: "8.jpg",
+                stills: Array.from({ length: 13 }, (_, i) => ({ src: `${113 + i}.jpg` }))
+            },
+            {
+                title: "想飞的女孩",
+                year: "2025",
+                role: "饰演 田恬",
+                poster: "20.jpg",
+                stills: Array.from({ length: 7 }, (_, i) => ({ src: `${126 + i}.jpg` }))
+            },
+            {
+                title: "消失的人",
+                year: "2026",
+                role: "饰演 林雨彤",
+                poster: "21.jpg",
+                stills: Array.from({ length: 7 }, (_, i) => ({ src: `${133 + i}.jpg` }))
+            }
+        ];
+
+        let currentFilmIndex = null;
+        let currentStillIndex = null;
+        let currentStillsList = null;
+
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+        const modalCounter = document.getElementById('modalCounter');
+        const modalCaption = document.getElementById('modalCaption');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function updateModal() {
+            if (currentFilmIndex === null || currentStillIndex === null) return;
+            const still = currentStillsList[currentStillIndex];
+            modalImg.src = still.src;
+            modalCaption.textContent = '';
+            modalCounter.textContent = `${currentStillIndex + 1} / ${currentStillsList.length}`;
+        }
+
+        function openModal(filmIdx, stillIdx) {
+            currentFilmIndex = filmIdx;
+            currentStillIndex = stillIdx;
+            currentStillsList = films[filmIdx].stills;
+            updateModal();
+            modal.classList.add('active');
+        }
+
+        function prevImage() {
+            if (currentFilmIndex === null) return;
+            if (currentStillsList.length === 0) return;
+            currentStillIndex = (currentStillIndex - 1 + currentStillsList.length) % currentStillsList.length;
+            updateModal();
+        }
+        function nextImage() {
+            if (currentFilmIndex === null) return;
+            if (currentStillsList.length === 0) return;
+            currentStillIndex = (currentStillIndex + 1) % currentStillsList.length;
+            updateModal();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            currentFilmIndex = null;
+            currentStillIndex = null;
+            currentStillsList = null;
+        }
+
+        prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+        nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') { e.preventDefault(); prevImage(); }
+            else if (e.key === 'ArrowRight') { e.preventDefault(); nextImage(); }
+            else if (e.key === 'Escape') closeModal();
+        });
+
+        const container = document.getElementById('filmsContainer');
+        films.forEach((film, filmIdx) => {
+            const section = document.createElement('section');
+            section.className = 'film-section';
+
+            section.innerHTML = `
+                <div class="film-header">
+                    <div class="film-poster">
+                        <img src="${film.poster}" alt="${film.title} 宣传照">
+                    </div>
+                    <div class="film-info">
+                        <h2>${film.title}</h2>
+                        <div class="film-year">${film.year}</div>
+                        <div class="film-role">${film.role}</div>
+                    </div>
+                </div>
+                <div class="film-gallery">
+                    <h3><span class="icon">🎞️</span> 剧照集</h3>
+                    <div class="stills-wrapper">
+                        <div class="stills-grid" id="grid-${filmIdx}"></div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(section);
+
+            const stillsGrid = section.querySelector(`.stills-grid`);
+            film.stills.forEach((still, stillIdx) => {
+                const stillDiv = document.createElement('div');
+                stillDiv.className = 'still-item';
+                stillDiv.innerHTML = `<img src="${still.src}" alt="${film.title} 剧照" loading="lazy">`;
+                stillDiv.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(filmIdx, stillIdx);
+                });
+                stillsGrid.appendChild(stillDiv);
+            });
+        });
+    </script>
+</body>
+</html>

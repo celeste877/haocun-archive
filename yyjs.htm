@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>语义检索演示 | 刘浩存电影数字档案馆</title>
+    <link rel="icon" type="image/x-icon" href="22.jpg">
+    <meta name="description" content="模拟SPARQL语义检索——按导演、年份、演员、奖项查询刘浩存电影作品。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --crimson: #9b2c1d;
+            --crimson-dark: #7a2417;
+            --crimson-light: #fef5f3;
+            --gold: #c9a96e;
+            --gold-light: #faf3e0;
+            --charcoal: #2c2c2c;
+            --gray-light: #f8f8f8;
+            --gray-mid: #6c6c6c;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ========= 导航栏 - 统一下拉菜单样式（语义检索不在主菜单中） ========= */
+        .page-header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--crimson);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--crimson);
+            text-decoration: none;
+            font-family: 'Noto Serif SC', '宋体', serif;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--charcoal);
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--crimson);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--crimson);
+            border-radius: 2px;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                position: static;
+            }
+            .nav-links {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
+            }
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            padding: 3rem 0 1rem;
+        }
+        .page-title h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--crimson);
+            position: relative;
+            display: inline-block;
+        }
+        .page-title h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .page-title p {
+            margin-top: 1rem;
+            color: black;
+        }
+
+        /* 检索面板 */
+        .search-panel {
+            background: var(--white);
+            border-radius: 28px;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+        }
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .filter-group label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--crimson);
+        }
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid #ddd;
+            background: var(--gray-light);
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: var(--gold);
+        }
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .search-btn {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .search-btn:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
+        .reset-btn {
+            background: var(--gray-light);
+            color: var(--charcoal);
+            border: 1px solid #ddd;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .reset-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* 结果统计 */
+        .result-stats {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--gray-mid);
+        }
+
+        /* 结果卡片网格 */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .result-card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(155,44,29,0.08);
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold);
+        }
+        .result-poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            background: #e0e0e0;
+        }
+        .result-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .result-info {
+            padding: 1rem;
+        }
+        .result-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--crimson);
+            margin-bottom: 0.2rem;
+        }
+        .result-year {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+        }
+        .result-director,
+        .result-rating {
+            font-size: 0.8rem;
+            color: var(--gray-mid);
+            margin-top: 0.2rem;
+        }
+        .no-result {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-mid);
+        }
+
+        /* 相关链接 */
+        .links-section {
+            padding: 2rem 0 4rem;
+            background: var(--white);
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .links-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--crimson);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .links-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .link-card {
+            background: var(--gray-light);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .link-card:hover {
+            background: var(--white);
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+        }
+        .link-card .icon {
+            font-size: 1.2rem;
+        }
+        .link-card span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="container">
+            <div class="navbar">
+                <div class="nav-container">
+                    <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+                    <ul class="nav-links">
+                        <li><a href="sy.htm">首页</a></li>
+                        <li><a href="rwjj.htm">人物档案</a></li>
+                        <li><a href="zpk.htm">作品库</a></li>
+                        <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="yxdc.htm">影像典藏</a></li>
+                        <li><a href="xssy.htm">学术视野</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>语义检索演示</h1>
+                <p>模拟 SPARQL 查询 · 按导演、年份、合作演员、奖项检索电影</p>
+            </div>
+
+            <!-- 检索面板 -->
+            <div class="search-panel">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>🎬 导演</label>
+                        <select id="directorFilter">
+                            <option value="">全部</option>
+                            <option value="张艺谋">张艺谋</option>
+                            <option value="韩延">韩延</option>
+                            <option value="韩寒">韩寒</option>
+                            <option value="杨子">杨子</option>
+                            <option value="刘雨霖">刘雨霖</option>
+                            <option value="徐伟">徐伟</option>
+                            <option value="文晏">文晏</option>
+                            <option value="程伟豪">程伟豪</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>📅 上映年份</label>
+                        <select id="yearFilter">
+                            <option value="">全部</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>👥 合作演员（关键词）</label>
+                        <input type="text" id="actorInput" placeholder="例如：张译">
+                    </div>
+                    <div class="filter-group">
+                        <label>🏆 奖项结果</label>
+                        <select id="awardFilter">
+                            <option value="">全部</option>
+                            <option value="获奖">仅获奖</option>
+                            <option value="提名">仅提名</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-actions">
+                    <button class="search-btn" id="searchBtn">语义检索</button>
+                    <button class="reset-btn" id="resetBtn">重置</button>
+                </div>
+            </div>
+
+            <!-- 结果统计 -->
+            <div id="resultStats" class="result-stats"></div>
+
+            <!-- 结果展示网格 -->
+            <div id="resultsGrid" class="results-grid"></div>
+        </div>
+
+        <!-- 相关链接 -->
+        <div class="links-section">
+            <div class="container">
+                <div class="links-title">相关链接</div>
+                <div class="links-grid">
+                    <a href="https://baike.baidu.com/item/%E5%88%98%E6%B5%A9%E5%AD%98/23284525" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📖</span>
+                        <span>百度百科</span>
+                    </a>
+                    <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🐦</span>
+                        <span>新浪微博</span>
+                    </a>
+                    <a href="https://xhslink.com/m/71nBbC0T9Kp" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">📕</span>
+                        <span>小红书</span>
+                    </a>
+                    <a href="https://v.douyin.com/qCxQVsclogI/" target="_blank" rel="noopener noreferrer" class="link-card">
+                        <span class="icon">🎵</span>
+                        <span>抖音</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 刘浩存电影数字档案馆 · 基于语义网技术的知识化电影档案平台 | 开放访问 · 学术交流</p>
+        <p style="margin-top: 0.5rem;">本页面模拟关联数据查询，实际SPARQL端点正在规划中。</p>
+    </footer>
+
+    <script>
+        // ==================== 数据定义 ====================
+        const moviesData = [
+            { title: "一秒钟", titleEn: "One Second", year: 2020, director: "张艺谋", actors: ["张译","范伟","余皑磊"], rating: 7.7, poster: "/9.jpg" },
+            { title: "送你一朵小红花", titleEn: "A Little Red Flower", year: 2020, director: "韩延", actors: ["易烊千玺","朱媛媛","高亚麟","夏雨","岳云鹏"], rating: 7.2, poster: "/7.jpg" },
+            { title: "悬崖之上", titleEn: "Cliff Walkers", year: 2021, director: "张艺谋", actors: ["张译","于和伟","秦海璐","朱亚文","倪大红","李乃文","余皑磊"], rating: 7.4, poster: "/10.jpg" },
+            { title: "四海", titleEn: "Only Fools Rush In", year: 2022, director: "韩寒", actors: ["刘昊然","沈腾","尹正","乔杉","周奇","张宥浩"], rating: 5.6, poster: "/17.jpg" },
+            { title: "龙马精神", titleEn: "Ride On", year: 2023, director: "杨子", actors: ["成龙","郭麒麟","吴京","余皑磊","容祖儿"], rating: 5.8, poster: "/18.jpg" },
+            { title: "念念相忘", titleEn: "Just For Meeting You", year: 2023, director: "刘雨霖", actors: ["宋威龙","卜冠今","郭丞","高亚麟","倪虹洁"], rating: 6.9, poster: "/19.jpg" },
+            { title: "灿烂的她", titleEn: "Nian Can Lan De Ta", year: 2024, director: "徐伟", actors: ["惠英红","张子贤","刘欢","苇青"], rating: 5.9, poster: "/8.jpg" },
+            { title: "想飞的女孩", titleEn: "Girls on Wire", year: 2025, director: "文晏", actors: ["文淇","张宥浩","刘奕铁","杨皓宇","耿乐"], rating: 5.4, poster: "/20.jpg" },
+            { title: "消失的人", titleEn: "The Vanished", year: 2026, director: "程伟豪", actors: ["郑恺","邱泽","李晨","姜妍","黄小蕾"], rating: null, poster: "/21.jpg", yearDisplay: "2026（定档5月1日）" }
+        ];
+
+        function getAwardResult(filmTitle) {
+            if (filmTitle === "送你一朵小红花") return "获奖";
+            if (filmTitle === "想飞的女孩") return "获奖";
+            if (filmTitle === "四海") return "获奖";
+            if (filmTitle === "灿烂的她") return "获奖";
+            if (filmTitle === "龙马精神") return "提名";
+            if (filmTitle === "一秒钟") return "获奖";
+            if (filmTitle === "悬崖之上") return "获奖";
+            if (filmTitle === "消失的人") return "无";
+            return "无";
+        }
+
+        let currentFilters = { director: "", year: "", actor: "", award: "" };
+
+        function renderResults() {
+            const filtered = moviesData.filter(movie => {
+                if (currentFilters.director && movie.director !== currentFilters.director) return false;
+                if (currentFilters.year && movie.year != currentFilters.year) return false;
+                if (currentFilters.actor) {
+                    const keyword = currentFilters.actor.toLowerCase();
+                    const actorMatch = movie.actors.some(actor => actor.toLowerCase().includes(keyword));
+                    if (!actorMatch) return false;
+                }
+                if (currentFilters.award) {
+                    const awardRes = getAwardResult(movie.title);
+                    if (awardRes !== currentFilters.award) return false;
+                }
+                return true;
+            });
+
+            const statsDiv = document.getElementById("resultStats");
+            const gridDiv = document.getElementById("resultsGrid");
+
+            if (filtered.length === 0) {
+                statsDiv.innerHTML = `<span>未找到符合条件的电影，请尝试其他检索条件。</span>`;
+                gridDiv.innerHTML = `<div class="no-result">没有找到相关作品</div>`;
+                return;
+            }
+
+            statsDiv.innerHTML = `<span>共找到 ${filtered.length} 部电影符合您的语义检索条件。</span>`;
+            gridDiv.innerHTML = filtered.map(movie => {
+                const yearDisplay = movie.yearDisplay || movie.year;
+                const ratingDisplay = movie.rating ? `⭐ ${movie.rating} 分` : "📅 待上映";
+                return `
+                    <div class="result-card">
+                        <div class="result-poster">
+                            <img src="${movie.poster}" alt="${movie.title}" onerror="this.src='placeholder.jpg'">
+                        </div>
+                        <div class="result-info">
+                            <div class="result-title">${movie.title}</div>
+                            <div class="result-year">${yearDisplay}</div>
+                            <div class="result-director">🎬 导演：${movie.director}</div>
+                            <div class="result-rating">${ratingDisplay}</div>
+                            <div class="result-director">👥 合作演员：${movie.actors.join("、")}</div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function updateFiltersAndSearch() {
+            currentFilters.director = document.getElementById("directorFilter").value;
+            currentFilters.year = document.getElementById("yearFilter").value;
+            currentFilters.actor = document.getElementById("actorInput").value.trim();
+            currentFilters.award = document.getElementById("awardFilter").value;
+            renderResults();
+        }
+
+        function resetFilters() {
+            document.getElementById("directorFilter").value = "";
+            document.getElementById("yearFilter").value = "";
+            document.getElementById("actorInput").value = "";
+            document.getElementById("awardFilter").value = "";
+            currentFilters = { director: "", year: "", actor: "", award: "" };
+            renderResults();
+        }
+
+        document.getElementById("searchBtn").addEventListener("click", updateFiltersAndSearch);
+        document.getElementById("resetBtn").addEventListener("click", resetFilters);
+
+        renderResults();
+    </script>
+</body>
+</html>
