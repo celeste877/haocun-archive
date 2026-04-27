@@ -22,7 +22,6 @@
             --gold-light: #faf3e0;
             --charcoal: #2c2c2c;
             --gray-light: #f8f8f8;
-            --gray-mid: #6c6c6c;
             --white: #ffffff;
             --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
             --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
@@ -32,7 +31,7 @@
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: var(--gray-light);
-            color: var(--charcoal);
+            color: #1a1a1a; /* 黑色 */
             line-height: 1.5;
         }
 
@@ -226,7 +225,7 @@
         }
         .content-text {
             font-size: 1rem;
-            color: var(--charcoal);
+            color: #1a1a1a; /* 黑色 */
             line-height: 1.7;
         }
         .tech-grid {
@@ -259,7 +258,7 @@
         }
         .tech-desc {
             font-size: 0.85rem;
-            color: #000000;
+            color: #1a1a1a; /* 黑色 */
         }
         .contact-info {
             background: var(--gold-light);
@@ -280,7 +279,7 @@
             padding: 0.5rem 1rem;
             border-radius: 40px;
             text-decoration: none;
-            color: var(--charcoal);
+            color: #1a1a1a; /* 黑色 */
             transition: var(--transition);
         }
         .contact-link:hover {
@@ -314,9 +313,9 @@
             align-items: center;
             gap: 0.6rem;
             text-decoration: none;
-            color: var(--charcoal);
             transition: var(--transition);
             border: 1px solid transparent;
+            color: #1a1a1a; /* 黑色 */
         }
         .link-card:hover {
             background: var(--white);
@@ -329,6 +328,7 @@
         .link-card span {
             font-weight: 500;
             font-size: 0.9rem;
+            color: #1a1a1a; /* 黑色 */
         }
 
         footer {
@@ -372,7 +372,7 @@
                 <h1>关于我们</h1>
             </div>
 
-            <!-- 项目介绍（完善文字） -->
+            <!-- 项目介绍 -->
             <div class="content-card">
                 <div class="section-title">
                     <span class="icon"></span>
@@ -385,7 +385,7 @@
                 </div>
             </div>
 
-            <!-- 项目愿景（完善文字） -->
+            <!-- 项目愿景 -->
             <div class="content-card">
                 <div class="section-title">
                     <span class="icon"></span>
@@ -442,10 +442,10 @@
                 </div>
                 <div class="contact-info">
                     <a href="mailto:195019192@qq.com" class="contact-link">
-                        <span></span> 195019192@qq.com
+                        <span>📧</span> 195019192@qq.com
                     </a>
-                    <a href="#" class="contact-link" style="pointer-events: none; opacity: 0.6;">
-                        <span></span> GitHub (建设中)
+                    <a href="https://github.com/celeste877/haocun-archive" target="_blank" rel="noopener noreferrer" class="contact-link">
+                        <span></span> GitHub
                     </a>
                 </div>
                 <div class="content-text" style="margin-top: 1rem; text-align: center;">
@@ -454,7 +454,7 @@
             </div>
         </div>
 
-        <!-- 外部链接（与首页相同） -->
+        <!-- 外部链接 -->
         <div class="links-section">
             <div class="container">
                 <div class="section-title" style="font-family: 'Noto Serif SC', serif; font-size: 1.6rem; font-weight: 700; color: var(--crimson); margin-bottom: 1.5rem;">相关链接</div>
