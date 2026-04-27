@@ -42,15 +42,18 @@
             padding: 0 2rem;
         }
 
-        /* 导航栏 */
-        .navbar {
+        /* 导航栏 - 统一样式 */
+        .page-header {
             background: var(--white);
             box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 1rem 0;
             border-bottom: 2px solid var(--crimson);
+        }
+
+        .navbar {
+            padding: 1rem 0;
         }
 
         .nav-container {
@@ -82,6 +85,10 @@
             transform: translateX(-50%);
         }
 
+        .nav-links li {
+            position: relative;
+        }
+
         .nav-links a {
             text-decoration: none;
             font-weight: 700;
@@ -107,6 +114,45 @@
             border-radius: 2px;
         }
 
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -120,14 +166,19 @@
                 flex-wrap: wrap;
                 gap: 1rem;
             }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
+            }
         }
 
         /* 页面标题 */
-        .page-header {
+        .page-title {
             padding: 3rem 0 1rem;
             text-align: center;
         }
-        .page-header h1 {
+        .page-title h1 {
             font-family: 'Noto Serif SC', '宋体', serif;
             font-size: 2.5rem;
             font-weight: 600;
@@ -135,7 +186,7 @@
             position: relative;
             display: inline-block;
         }
-        .page-header h1:after {
+        .page-title h1:after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -146,7 +197,7 @@
             background: var(--gold);
             border-radius: 2px;
         }
-        .page-header p {
+        .page-title p {
             margin-top: 1rem;
             color: black;
         }
@@ -442,23 +493,34 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
-            <ul class="nav-links">
-                <li><a href="sy.htm">首页</a></li>
-                <li><a href="rwjj.htm">人物档案</a></li>
-                <li><a href="zpk.htm" class="active">作品库</a></li>
-                <li><a href="ryjx.htm">荣誉奖项</a></li>
-                <li><a href="xssy.htm">学术视野</a></li>
-                <li><a href="gywm.htm">关于我们</a></li>
-            </ul>
+    <header class="page-header">
+        <div class="container">
+            <div class="navbar">
+                <div class="nav-container">
+                    <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+                    <ul class="nav-links">
+                        <li><a href="sy.htm">首页</a></li>
+                        <li><a href="rwjj.htm">人物档案</a></li>
+                        <li><a href="zpk.htm" class="active">作品库</a></li>
+                        <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="yxdc.htm">影像典藏</a></li>
+                        <li><a href="xssy.htm">学术视野</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <main>
         <div class="container">
-            <div class="page-header">
+            <div class="page-title">
                 <h1>作品库</h1>
                 <p>刘浩存电影作品全记录 · 共9部</p>
             </div>
@@ -533,7 +595,7 @@
                 director: "张艺谋",
                 plot: "二十世纪七十年代中期，为了观看一场电影，逃犯张九声与流浪儿刘闺女因电影结下不解之缘。刘浩存饰演的刘闺女是一个为了给弟弟做灯罩而偷胶片、倔强又善良的流浪女孩。",
                 rating: 7.7,
-                poster: "9.jpg",
+                poster: "/9.jpg",
                 watchUrl: "https://www.bilibili.com/bangumi/play/ep376368"
             },
             {
@@ -545,7 +607,7 @@
                 director: "韩延",
                 plot: "两个抗癌家庭的故事，身患脑肿瘤的少年韦一航在病友会上结识了乐观开朗的女孩马小远，两人相互陪伴，一起探索世界、对抗病魔，传递着温暖与希望。",
                 rating: 7.2,
-                poster: "7.jpg",
+                poster: "/7.jpg",
                 watchUrl: "https://v.qq.com/x/cover/mzc00200oxq32bf/a00361knb0n.html"
             },
             {
@@ -557,7 +619,7 @@
                 director: "张艺谋",
                 plot: "上世纪三十年代，四名共产党特工潜入伪满洲国执行秘密任务，刘浩存饰演的小兰是特工小组中最年轻的成员，在危机四伏的环境中，与战友们一起完成代号“乌特拉”的行动。",
                 rating: 7.4,
-                poster: "10.jpg",
+                poster: "/10.jpg",
                 watchUrl: "https://www.iqiyi.com/v_25a0rbs0ar4.html"
             },
             {
@@ -569,7 +631,7 @@
                 director: "韩寒",
                 plot: "擅长摩托车特技的少年吴仁耀与旅馆服务员周欢颂相识相恋，两人一起离开海岛闯荡大城市，却在现实的冲击下经历了成长与遗憾的故事。",
                 rating: 5.6,
-                 poster: "17.jpg",
+                poster: "/17.jpg",
                 watchUrl: "https://www.bilibili.com/bangumi/play/ep493071?theme=movie&spm_id_from=333.337.0.0"
             },
             {
@@ -581,7 +643,7 @@
                 director: "杨子",
                 plot: "生活落魄的武行老罗想把爱马“赤兔”培养成动作明星，却深陷官司，只能求助多年未见的女儿罗小宝和她的律师男友，小宝一边帮父亲打官司，一边劝说父亲放弃危险动作，展现了父女间的温情与羁绊。",
                 rating: 5.8,
-                 poster: "18.jpg",
+                poster: "/18.jpg",
                 watchUrl: "https://v.qq.com/x/cover/mzc00200kzadcff/x0046ik7mf5.html"
             },
             {
@@ -593,7 +655,7 @@
                 director: "刘雨霖",
                 plot: "转校生许念念与少年杨燚因误会结下梁子，水火不容的两人在相处中逐渐了解彼此，共同经历青春趣事，在懵懂的情愫与现实抉择中，留下了关于青春的遗憾与成长。",
                 rating: 6.9,
-                 poster: "19.jpg",
+                poster: "/19.jpg",
                 watchUrl: "https://www.iqiyi.com/v_1c11a9l36po.html"
             },
             {
@@ -605,7 +667,7 @@
                 director: "徐伟",
                 plot: "慈祥的奶奶江秀枝与走失十二年的孙女徐嘉怡重逢，祖孙二人从生疏到彼此依偎，相处中徐嘉怡的秘密逐渐被揭开，展现了超越血缘的亲情与双向救赎。",
                 rating: 5.9,
-                 poster: "8.jpg",
+                poster: "/8.jpg",
                 watchUrl: "https://www.bilibili.com/bangumi/play/ep819995?theme=movie&spm_id_from=333.337.0.0"
             },
             {
@@ -617,7 +679,7 @@
                 director: "文晏",
                 plot: "拼死逃离毒窟的田恬走投无路，前去寻找已决裂五年的表姐方笛，两人在困境中重新产生交集，共同面对危机，讲述了一对表姐妹二十余年的成长与救赎。",
                 rating: 5.4,
-                 poster: "20.jpg",
+                poster: "/20.jpg",
                 watchUrl: "https://www.bilibili.com/bangumi/play/ep1582869?theme=movie&spm_id_from=333.337.0.0"
             },
             {
@@ -629,7 +691,7 @@
                 director: "程伟豪",
                 plot: "同一小区里，儿童失踪、深夜入侵、尸体藏匿三起看似无关的谜案，独居女孩林雨彤被卷入其中，随着调查深入，小区里每个看似寻常的居民都有着不可告人的秘密。",
                 rating: null,
-                 poster: "21.jpg",
+                poster: "/21.jpg",
                 watchUrl: null,
                 yearDisplay: "2026（定档5月1日）"
             }
