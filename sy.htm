@@ -6,7 +6,6 @@
     <title>刘浩存电影数字档案馆</title>
     <link rel="icon" type="image/x-icon" href="22.jpg">
     <meta name="description" content="基于语义网技术的刘浩存电影数字档案馆——从胶片数字化到档案知识化。">
-    <!-- 网络字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
@@ -52,7 +51,7 @@
             padding: 0 2rem;
         }
 
-        /* 导航栏 - 增加下拉菜单样式 */
+        /* 导航栏 - 原样（绝对定位居中+下拉菜单） */
         .page-header {
             background: var(--white);
             box-shadow: var(--shadow-sm);
@@ -448,7 +447,7 @@
             color: var(--crimson);
         }
 
-        /* 相关链接区域 - Flexbox */
+        /* 相关链接区域 */
         .links-section {
             margin: 4rem 0 3rem 0;
             text-align: center;
@@ -602,38 +601,74 @@
         <section class="cards-section" id="cardsSection">
             <div class="cards-title">探索更多</div>
             <div class="cards-grid">
-                <article class="float-card" data-url="rwjj.htm">
+                <!-- 人物档案 -->
+                <div class="float-card" data-url="rwjj.htm">
                     <img class="card-img" src="/2.jpg" alt="刘浩存人物档案">
                     <div class="card-content">
                         <h4>人物档案</h4>
                         <p>刘浩存·演艺生涯</p>
                     </div>
-                </article>
-                <article class="float-card" data-url="zpk.htm">
+                </div>
+                <!-- 作品库 -->
+                <div class="float-card" data-url="zpk.htm">
                     <img class="card-img" src="/3.jpg" alt="刘浩存作品库">
                     <div class="card-content">
                         <h4>作品库</h4>
                         <p>电影·全记录</p>
                     </div>
-                </article>
-                <article class="float-card" data-url="ryjx.htm">
+                </div>
+                <!-- 荣誉奖项 -->
+                <div class="float-card" data-url="ryjx.htm">
                     <img class="card-img" src="/4.jpg" alt="刘浩存荣誉奖项">
                     <div class="card-content">
                         <h4>荣誉奖项</h4>
                         <p>获奖·提名</p>
                     </div>
-                </article>
-                <article class="float-card" data-url="xssy.htm">
-                    <img class="card-img" src="/5.jpg" alt="刘浩存学术探索">
+                </div>
+                <!-- 学术视野 -->
+                <div class="float-card" data-url="xssy.htm">
+                    <img class="card-img" src="/5.jpg" alt="刘浩存学术视野">
                     <div class="card-content">
                         <h4>学术视野</h4>
                         <p>知识图谱等</p>
                     </div>
-                </article>
+                </div>
+                <!-- 影像典藏 -->
+                <div class="float-card" data-url="yxdc.htm">
+                    <img class="card-img" src="/22.jpg" alt="刘浩存影像典藏">
+                    <div class="card-content">
+                        <h4>影像典藏</h4>
+                        <p>剧照·宣传图</p>
+                    </div>
+                </div>
+                <!-- 角色小传 -->
+                <div class="float-card" data-url="jsxz.htm">
+                    <img class="card-img" src="/142.jpg" alt="刘浩存角色小传">
+                    <div class="card-content">
+                        <h4>角色小传</h4>
+                        <p>时空对话·角色故事</p>
+                    </div>
+                </div>
+                <!-- 语义检索 -->
+                <div class="float-card" data-url="yyjs.htm">
+                    <img class="card-img" src="/143.jpg" alt="语义检索演示">
+                    <div class="card-content">
+                        <h4>语义检索</h4>
+                        <p>模拟SPARQL查询</p>
+                    </div>
+                </div>
+                <!-- 数据概览 -->
+                <div class="float-card" data-url="sjgl.htm">
+                    <img class="card-img" src="/144.jpg" alt="数据概览">
+                    <div class="card-content">
+                        <h4>数据概览</h4>
+                        <p>统计图表·看板</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- 刘浩存微博动态模块（手动更新） -->
+        <!-- 微博动态模块 -->
         <section class="dynamic-section">
             <div class="container">
                 <div class="dynamic-header">
@@ -644,7 +679,6 @@
                     <a href="https://weibo.com/u/3932588380" target="_blank" rel="noopener noreferrer" class="dynamic-more">查看全部</a>
                 </div>
                 <div class="dynamic-grid">
-                    <!-- 动态卡片 1 -->
                     <article class="dynamic-card">
                         <div class="dynamic-date">2026-04-19</div>
                         <div class="dynamic-content">
@@ -658,7 +692,6 @@
                             <a href="https://weibo.com/3932588380/QBvw5Fud3" target="_blank" rel="noopener noreferrer" class="dynamic-link">查看原文</a>
                         </div>
                     </article>
-                    <!-- 动态卡片 2 -->
                     <article class="dynamic-card">
                         <div class="dynamic-date">2026-04-16</div>
                         <div class="dynamic-content">
@@ -672,7 +705,6 @@
                             <a href="https://weibo.com/3932588380/QB5VLvDbR" target="_blank" rel="noopener noreferrer" class="dynamic-link">查看原文</a>
                         </div>
                     </article>
-                    <!-- 动态卡片 3 -->
                     <article class="dynamic-card">
                         <div class="dynamic-date">2026-04-07</div>
                         <div class="dynamic-content">
