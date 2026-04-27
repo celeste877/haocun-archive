@@ -45,15 +45,18 @@
             padding: 0 2rem;
         }
 
-        /* 导航栏 */
-        .navbar {
+        /* ========= 导航栏 - 统一下拉菜单样式 ========= */
+        .page-header {
             background: var(--white);
             box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 1rem 0;
             border-bottom: 2px solid var(--crimson);
+        }
+
+        .navbar {
+            padding: 1rem 0;
         }
 
         .nav-container {
@@ -85,6 +88,10 @@
             transform: translateX(-50%);
         }
 
+        .nav-links li {
+            position: relative;
+        }
+
         .nav-links a {
             text-decoration: none;
             font-weight: 700;
@@ -110,6 +117,45 @@
             border-radius: 2px;
         }
 
+        /* 下拉菜单样式 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 200;
+            border: 1px solid rgba(155,44,29,0.1);
+            margin-top: 0.5rem;
+        }
+
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gold-light);
+            color: var(--crimson);
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -123,14 +169,19 @@
                 flex-wrap: wrap;
                 gap: 1rem;
             }
+            .dropdown-menu {
+                left: 0;
+                transform: none;
+                min-width: 120px;
+            }
         }
 
         /* 页面标题区 */
-        .page-header {
+        .page-header-title {
             padding: 3rem 0 1rem;
             text-align: center;
         }
-        .page-header h1 {
+        .page-header-title h1 {
             font-family: 'Noto Serif SC', '宋体', serif;
             font-size: 2.5rem;
             font-weight: 600;
@@ -138,7 +189,7 @@
             position: relative;
             display: inline-block;
         }
-        .page-header h1:after {
+        .page-header-title h1:after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -149,7 +200,7 @@
             background: var(--gold);
             border-radius: 2px;
         }
-        .page-header p {
+        .page-header-title p {
             margin-top: 1rem;
             color: var(--gray-mid);
         }
@@ -290,6 +341,20 @@
             font-family: monospace;
             margin: 0;
         }
+        .sparql-link {
+            display: inline-block;
+            margin-top: 1rem;
+            background: var(--crimson);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .sparql-link:hover {
+            background: var(--gold);
+            color: var(--charcoal);
+        }
 
         /* 相关链接区域 */
         .links-section {
@@ -368,25 +433,35 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
-            <ul class="nav-links">
-                <li><a href="sy.htm">首页</a></li>
-                <li><a href="rwjj.htm">人物档案</a></li>
-                <li><a href="zpk.htm">作品库</a></li>
-                <li><a href="ryjx.htm">荣誉奖项</a></li>
-                <li><a href="xssy.htm" class="active">学术视野</a></li>
-                <li><a href="gywm.htm">关于我们</a></li>
-            </ul>
+    <header class="page-header">
+        <div class="container">
+            <div class="navbar">
+                <div class="nav-container">
+                    <a href="sy.htm" class="logo">刘浩存<span>·电影数字档案馆</span></a>
+                    <ul class="nav-links">
+                        <li><a href="sy.htm">首页</a></li>
+                        <li><a href="rwjj.htm">人物档案</a></li>
+                        <li><a href="zpk.htm">作品库</a></li>
+                        <li><a href="ryjx.htm">荣誉奖项</a></li>
+                        <li><a href="yxdc.htm">影像典藏</a></li>
+                        <li><a href="xssy.htm" class="active">学术视野</a></li>
+                        <li>
+                            <a href="#">更多 ▾</a>
+                            <div class="dropdown-menu">
+                                <a href="jsxz.htm">角色小传</a>
+                                <a href="gywm.htm">关于我们</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <main>
         <div class="container">
-            <div class="page-header">
+            <div class="page-header-title">
                 <h1>学术视野</h1>
-        
             </div>
 
             <!-- 统计概览 -->
@@ -400,8 +475,32 @@
                     <div class="stat-card"><div class="stat-number" id="awardCount">0</div><div>项荣誉（获奖+提名）</div></div>
                     <div class="stat-card"><div class="stat-number" id="actorCount">0</div><div>位合作演员</div></div>
                 </div>
+                <!-- 新增：数据概览详细看板链接 -->
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="sjgl.htm" style="display: inline-block; background: var(--crimson); color: white; padding: 0.5rem 1.2rem; border-radius: 30px; text-decoration: none;">查看详细数据看板</a>
+                </div>
             </div>
-            <!-- 知识图谱可视化（无箭头） -->
+
+            <!-- 技术架构卡片 -->
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon"></div>
+                    <div class="tech-title">关联数据</div>
+                    <div class="tech-desc">采用 JSON-LD 格式嵌入结构化数据，支持 RDF 序列化，规划 SPARQL 查询端点，实现数据开放与复用。</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon"></div>
+                    <div class="tech-title">知识图谱</div>
+                    <div class="tech-desc">利用可视化库展示刘浩存与导演、演员的合作网络，揭示潜在关联，支持交互式探索。</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon"></div>
+                    <div class="tech-title">语义标注</div>
+                    <div class="tech-desc">页面内嵌 schema.org 词汇表标注，提升搜索引擎理解与数据复用能力。</div>
+                </div>
+            </div>
+
+            <!-- 知识图谱可视化 -->
             <div class="content-card">
                 <div class="section-title">
                     <span class="icon"></span>
@@ -465,14 +564,19 @@
 
                 <!-- 新增：模拟 SPARQL 查询交互演示 -->
                 <div class="query-demo">
-                    <div style="font-weight: 600; margin-bottom: 0.5rem;"> 交互演示（基于本地数据模拟查询）</div>
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">交互演示（基于本地数据模拟查询）</div>
                     <div class="query-buttons">
-                        <button class="query-btn" id="queryDirectorsBtn"> 查询合作导演</button>
-                        <button class="query-btn" id="queryHighRatingBtn"> 查询高分电影（2020年后，评分>7.0）</button>
+                        <button class="query-btn" id="queryDirectorsBtn">🎬 查询合作导演</button>
+                        <button class="query-btn" id="queryHighRatingBtn">⭐ 查询高分电影（2020年后，评分>7.0）</button>
                     </div>
                     <div class="query-result" id="queryResult">
                         <span style="color: var(--gray-mid);">点击上方按钮查看查询结果</span>
                     </div>
+                </div>
+
+                <!-- 新增跳转链接：进入完整的语义检索演示页面 -->
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="yyjs.htm" class="sparql-link">进入语义检索演示页面</a>
                 </div>
             </div>
         </div>
@@ -604,25 +708,19 @@
         window.addEventListener('resize', () => myChart.resize());
 
         // ==================== 模拟 SPARQL 查询交互 ====================
-        // 查询1：刘浩存合作过的导演（去重）
         function queryDirectors() {
             const directorsSet = new Set();
             moviesData.forEach(movie => {
                 if (movie.director) directorsSet.add(movie.director);
             });
             const directors = Array.from(directorsSet).sort();
-            if (directors.length === 0) {
-                return "未查询到合作导演。";
-            }
+            if (directors.length === 0) return "未查询到合作导演。";
             return `🎬 刘浩存合作过的导演（共 ${directors.length} 位）：\n${directors.join("、")}`;
         }
 
-        // 查询2：2020年后上映且豆瓣评分高于7.0的电影
         function queryHighRatingMovies() {
             const filtered = moviesData.filter(m => m.year >= 2020 && m.rating !== null && m.rating > 7.0);
-            if (filtered.length === 0) {
-                return "未找到符合条件的高分电影。";
-            }
+            if (filtered.length === 0) return "未找到符合条件的高分电影。";
             let result = `⭐ 2020年后上映且评分 > 7.0 的电影（共 ${filtered.length} 部）：\n`;
             filtered.forEach(m => {
                 result += `《${m.title}》 (${m.year}) · 豆瓣评分 ${m.rating}\n`;
@@ -630,20 +728,16 @@
             return result;
         }
 
-        // 显示结果
         function showQueryResult(content) {
             const resultDiv = document.getElementById('queryResult');
             resultDiv.innerHTML = `<pre style="white-space: pre-wrap; margin:0;">${content}</pre>`;
         }
 
         document.getElementById('queryDirectorsBtn').addEventListener('click', () => {
-            const result = queryDirectors();
-            showQueryResult(result);
+            showQueryResult(queryDirectors());
         });
-
         document.getElementById('queryHighRatingBtn').addEventListener('click', () => {
-            const result = queryHighRatingMovies();
-            showQueryResult(result);
+            showQueryResult(queryHighRatingMovies());
         });
     </script>
 </body>
